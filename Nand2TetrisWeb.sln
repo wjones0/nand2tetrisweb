@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nand2TetrisWeb", "Nand2TetrisWeb\Nand2TetrisWeb.csproj", "{4E791837-5B6F-4B26-8B92-193C8005B09E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{BB8C216A-CEB3-40DC-B9C5-6D75AE18CA38}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{4E791837-5B6F-4B26-8B92-193C8005B09E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E791837-5B6F-4B26-8B92-193C8005B09E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E791837-5B6F-4B26-8B92-193C8005B09E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB8C216A-CEB3-40DC-B9C5-6D75AE18CA38}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB8C216A-CEB3-40DC-B9C5-6D75AE18CA38}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB8C216A-CEB3-40DC-B9C5-6D75AE18CA38}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB8C216A-CEB3-40DC-B9C5-6D75AE18CA38}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

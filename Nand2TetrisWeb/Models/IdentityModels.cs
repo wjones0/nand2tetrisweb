@@ -29,5 +29,7 @@ namespace Nand2TetrisWeb.Models
         {
             return new ApplicationDbContext();
         }
+
+        public System.Data.Entity.DbSet<Contracts.SourceFile> SourceFiles { get; set; }
     }
 }

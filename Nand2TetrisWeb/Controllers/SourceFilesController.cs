@@ -10,6 +10,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Contracts;
 using Nand2TetrisWeb.Models;
+//using System.Web.Mvc;
 
 namespace Nand2TetrisWeb.Controllers
 {
@@ -18,9 +19,9 @@ namespace Nand2TetrisWeb.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/SourceFiles
-        public IQueryable<SourceFile> GetSourceFiles()
+        public IHttpActionResult GetSourceFiles() 
         {
-            return db.SourceFiles;
+            return Json(db.SourceFiles);
         }
 
         // GET: api/SourceFiles/5
@@ -33,9 +34,9 @@ namespace Nand2TetrisWeb.Controllers
                 return NotFound();
             }
 
-            return Ok(sourceFile);
+            return Json(sourceFile);
         }
-
+        /*
         // PUT: api/SourceFiles/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutSourceFile(int id, SourceFile sourceFile)
@@ -101,7 +102,7 @@ namespace Nand2TetrisWeb.Controllers
 
             return Ok(sourceFile);
         }
-
+        */
         protected override void Dispose(bool disposing)
         {
             if (disposing)
@@ -110,7 +111,7 @@ namespace Nand2TetrisWeb.Controllers
             }
             base.Dispose(disposing);
         }
-
+        
         private bool SourceFileExists(int id)
         {
             return db.SourceFiles.Count(e => e.id == id) > 0;

@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using Nand2TetrisWeb.DAL;
 
 namespace Nand2TetrisWeb.Models
 {
@@ -23,6 +24,7 @@ namespace Nand2TetrisWeb.Models
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
         {
+            Database.SetInitializer<ApplicationDbContext>(new ApplicationDBInitializer());
         }
 
         public static ApplicationDbContext Create()

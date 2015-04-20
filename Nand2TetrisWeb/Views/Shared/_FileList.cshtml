@@ -1,1 +1,60 @@
-﻿2
+﻿
+<div id="newFileGroup" class="input-group">
+    <input id="newFileName" class="form-control" />
+    <span class="input-group-btn">
+        <button class="btn btn-default" type="button" onclick="newfile()">+</button>
+    </span>
+</div>
+
+<div id="existingFiles">
+    <ul id="fileListing"></ul>
+</div>
+
+<script type="text/javascript">
+    function newfile() {
+        var fileName = $("#newFileName").val();
+        $.ajax({
+            type: 'POST',
+            url: '/api/SourceFiles',
+            datatype: 'json',
+            data: { FileName: fileName },
+
+            statusCode: {
+                201: function (data) {
+                    GetExistingFiles();
+                    $("#newFileName").val("");
+                }
+            },
+            error: function (data) {
+                alert("error");
+            }
+        })
+    }
+
+
+    function GetExistingFiles()
+    {
+        $("#fileListing").empty();
+        $("#fileListing").append('<img src="../../Content/images/ajax-loader.gif" alt="" />');
+        $.ajax({
+            type: 'GET',
+            url: 'api/SourceFiles',
+            datatype: 'json',
+            success: function (data) {                
+                $("#fileListing").empty();
+                $.each(data, function (i, item) {
+                    $("#fileListing").append('<li onclick="loadFile('+item.id+')">' + item.FileName + "</li>");
+                });
+            }
+
+        });
+    }
+
+
+    $(document).ready(function () {
+        GetExistingFiles();
+    });
+
+</script>
+
+

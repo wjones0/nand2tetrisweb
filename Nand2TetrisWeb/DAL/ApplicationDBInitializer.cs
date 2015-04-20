@@ -8,7 +8,7 @@ using System.Web;
 
 namespace Nand2TetrisWeb.DAL
 {
-    public class ApplicationDBInitializer : DropCreateDatabaseAlways<ApplicationDbContext> //CreateDatabaseIfNotExists<ApplicationDbContext>
+    public class ApplicationDBInitializer :  DropCreateDatabaseAlways<ApplicationDbContext> //CreateDatabaseIfNotExists<ApplicationDbContext>  //
     {
         protected override void Seed(ApplicationDbContext context)
         {

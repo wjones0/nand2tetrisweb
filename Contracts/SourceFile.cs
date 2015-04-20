@@ -12,10 +12,16 @@ namespace Contracts
     {
         [Key]
         public int id { get; set; }
+
         public Guid userid { get; set; }
+
+        [Required]
         public string FileName { get; set; }
+
         public string FileBody { get; set; }
+
         public DateTime CreateDate { get; set; }
+
         public DateTime ModifyDate { get; set; }
 
     }

@@ -10,7 +10,6 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Contracts;
 using Nand2TetrisWeb.Models;
-//using System.Web.Mvc;
 
 namespace Nand2TetrisWeb.Controllers
 {
@@ -19,9 +18,12 @@ namespace Nand2TetrisWeb.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: api/SourceFiles
-        public IHttpActionResult GetSourceFiles() 
+        public IHttpActionResult GetSourceFiles()
         {
-            return Json(db.SourceFiles);
+            var userid = GetUserID();
+            return Json((from f in db.SourceFiles
+                             where f.userid == userid
+                             select f).ToList());
         }
 
         // GET: api/SourceFiles/5
@@ -29,29 +31,37 @@ namespace Nand2TetrisWeb.Controllers
         public IHttpActionResult GetSourceFile(int id)
         {
             SourceFile sourceFile = db.SourceFiles.Find(id);
-            if (sourceFile == null)
+            if (sourceFile == null || sourceFile.userid != GetUserID())
             {
                 return NotFound();
             }
 
             return Json(sourceFile);
         }
-        /*
+        
         // PUT: api/SourceFiles/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutSourceFile(int id, SourceFile sourceFile)
+        public IHttpActionResult PutSourceFile(int id, [FromBody] SourceFile sourceFile)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != sourceFile.id)
+            var sf = (from f in db.SourceFiles
+                      where f.id == id
+                      select f).FirstOrDefault();
+
+            if (id != sourceFile.id || sf.userid != GetUserID())
             {
                 return BadRequest();
             }
 
-            db.Entry(sourceFile).State = EntityState.Modified;
+            
+            sf.FileBody = sourceFile.FileBody;
+            sf.ModifyDate = DateTime.Now;
+
+            db.Entry(sf).State = EntityState.Modified;
 
             try
             {
@@ -74,19 +84,27 @@ namespace Nand2TetrisWeb.Controllers
 
         // POST: api/SourceFiles
         [ResponseType(typeof(SourceFile))]
+        [HttpPost]
         public IHttpActionResult PostSourceFile(SourceFile sourceFile)
         {
+
+            sourceFile.CreateDate = DateTime.Now;
+            sourceFile.ModifyDate = DateTime.Now;
+            sourceFile.userid = GetUserID();
+
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
+
 
             db.SourceFiles.Add(sourceFile);
             db.SaveChanges();
 
             return CreatedAtRoute("DefaultApi", new { id = sourceFile.id }, sourceFile);
         }
-
+        /*
         // DELETE: api/SourceFiles/5
         [ResponseType(typeof(SourceFile))]
         public IHttpActionResult DeleteSourceFile(int id)
@@ -111,10 +129,18 @@ namespace Nand2TetrisWeb.Controllers
             }
             base.Dispose(disposing);
         }
-        
+
         private bool SourceFileExists(int id)
         {
             return db.SourceFiles.Count(e => e.id == id) > 0;
+        }
+
+        private Guid GetUserID()
+        {
+            var userId = (from u in db.Users
+                          where u.UserName == User.Identity.Name
+                          select u.Id).FirstOrDefault();
+            return new Guid(userId);
         }
     }
 }

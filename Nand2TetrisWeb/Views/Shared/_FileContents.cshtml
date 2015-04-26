@@ -45,8 +45,7 @@
             data: { id: fileID, FileName: fileName, FileBody: newFileBodyText },
             success: function (data) {
                 $("#fileContentsSpinner").hide();
-                $("#fileBody").val(data.FileBody);
-                $("#fileID").val(data.id);
+                loadFile(fileID);
             }
 
         });

@@ -32,6 +32,8 @@ namespace Nand2TetrisWeb.Controllers
                 return Json(new List<string>());
 
             var ch = ChipParser.Parse(file.FileBody);
+            if (ch == null)
+                return Json(new List<string>());
 
             var pf = new ProcessedFile();
             pf.inputs = ch.Inputs.Keys.ToList<string>();
@@ -53,6 +55,9 @@ namespace Nand2TetrisWeb.Controllers
                 return Json(new List<string>());
 
             var ch = ChipParser.Parse(file.FileBody);
+
+            if(ch==null)
+                return Json(new List<string>());
 
             for (int i = 0; i < inputIDs.Length; i++)
             {

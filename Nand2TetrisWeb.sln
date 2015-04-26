@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nand2TetrisWeb", "Nand2Tetr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{BB8C216A-CEB3-40DC-B9C5-6D75AE18CA38}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChipProcessing", "ChipProcessing\ChipProcessing.csproj", "{D7426A0E-9EDC-45BE-A62F-3F3B3B0AB727}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{BB8C216A-CEB3-40DC-B9C5-6D75AE18CA38}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB8C216A-CEB3-40DC-B9C5-6D75AE18CA38}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB8C216A-CEB3-40DC-B9C5-6D75AE18CA38}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7426A0E-9EDC-45BE-A62F-3F3B3B0AB727}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7426A0E-9EDC-45BE-A62F-3F3B3B0AB727}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7426A0E-9EDC-45BE-A62F-3F3B3B0AB727}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7426A0E-9EDC-45BE-A62F-3F3B3B0AB727}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

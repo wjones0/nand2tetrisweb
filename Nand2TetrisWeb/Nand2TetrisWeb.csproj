@@ -246,6 +246,7 @@
     <Content Include="Views\HardwareSimulator\Index.cshtml" />
     <Content Include="Views\Shared\_FileList.cshtml" />
     <Content Include="Views\Shared\_FileContents.cshtml" />
+    <Content Include="Views\Shared\_ChipInputsAndOutputs.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -258,6 +259,10 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ChipProcessing\ChipProcessing.csproj">
+      <Project>{d7426a0e-9edc-45be-a62f-3f3b3b0ab727}</Project>
+      <Name>ChipProcessing</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Contracts\Contracts.csproj">
       <Project>{bb8c216a-ceb3-40dc-b9c5-6d75ae18ca38}</Project>
       <Name>Contracts</Name>

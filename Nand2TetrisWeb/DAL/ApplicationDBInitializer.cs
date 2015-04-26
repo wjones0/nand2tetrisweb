@@ -34,8 +34,19 @@ namespace Nand2TetrisWeb.DAL
             {
                 CreateDate = DateTime.Now,
                 ModifyDate = DateTime.Now,
-                FileName = "Nand.hdl",
-                FileBody = "/* Nand file \n */",
+                FileName = "Not.hdl",
+                FileBody = @"/**
+ * Not gate:
+ * out = not in
+ */
+
+CHIP Not {
+    IN in;
+    OUT out;
+
+    PARTS:
+    Nand (a=in,b=in,out=out);
+}",
                 userid = new Guid(bob.Id)
             });
             

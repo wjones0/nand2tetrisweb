@@ -1,0 +1,81 @@
+﻿
+
+<div id="fileContents" class="input-group">
+    <img src="../../Content/images/ajax-loader.gif" alt="" id="chipInsandOuts" hidden />
+    <div id="allChipInputs" hidden>
+        <table class="table table-striped table-bordered table-responsive" id="chipIns">
+        </table>
+    </div>
+    <button class="btn btn-default" id="processButton" onclick="processChip()">Process</button>
+    <div id="allChipOutputs">
+        <table class="table table-striped table-bordered table-responsive" id="chipOuts">
+        </table>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+
+
+    function parseFile(fileID) {
+        $("#chipInsandOuts").show();
+        $.ajax({
+            type: 'POST',
+            url: 'HardwareSimulator/ParseFile',
+            data: { id: fileID },
+            datatype: 'json',
+            success: function (data) {
+                $("#chipInsandOuts").hide();
+                $("#allChipInputs").show();
+
+                // inputs
+                $("#chipIns").empty();
+                $("#chipIns").append('<tr><th>Input Name</th><th>Value</th></tr>');
+                $.each(data.inputs, function (i, item) {
+                    $("#chipIns").append('<tr><td>' + item + '</td><td><input id="'+item+'"></input></td></tr>');
+                });
+
+                //outputs
+                $("#chipOuts").empty();
+                $("#chipOuts").append('<tr><th>Output Name</th><th>Value</th></tr>');
+                $.each(data.outputs, function (i, item) {
+                    $("#chipOuts").append('<tr><td>' + item + '</td><td><span id="' + item + '"></span></td></tr>');
+                });
+            }
+
+        });
+    }
+
+    function processChip()
+    {
+        var inputs = $("#allChipInputs :input");
+        var ids = [];
+        var vals = [];
+        var fileID = $("#fileID").val();
+
+        inputs.each(function (index) {
+            ids[index] = $(this).attr('id');
+            vals[index] = $(this).val();
+        });
+
+        // process the chip, get the results, put in the output boxes
+        $.ajax({
+            type: 'POST',
+            url: 'HardwareSimulator/ProcessChip',
+            data: {fileid : fileID, inputIDs : ids, inputVals : vals},
+            datatype: 'json',
+            success: function (data) {
+                var result = $.parseJSON(data);
+                $.each(result, function (k, v) {
+                    $("#" + k).text(v);
+
+                });
+            }
+
+        });
+
+    }
+
+
+</script>
+

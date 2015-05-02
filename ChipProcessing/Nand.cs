@@ -16,8 +16,11 @@ namespace ChipProcessing
 
         }
 
-        public override void ProcessChip()
+        public override bool ProcessChip()
         {
+            if (_finishedProcessing)
+                return false;
+
             if (Inputs["a"] == "0")
             {
                 if (Inputs["b"] == "0")
@@ -25,8 +28,6 @@ namespace ChipProcessing
                 else
                     if (Inputs["b"] == "1")
                         Outputs["out"] = "0";
-                    else
-                        Outputs["out"] = "error";
             }
             else if (Inputs["a"] == "1")
             {
@@ -35,11 +36,14 @@ namespace ChipProcessing
                 else
                     if (Inputs["b"] == "1")
                         Outputs["out"] = "0";
-                    else
-                        Outputs["out"] = "error";
             }
             else
-                this.Outputs["out"] = "error";
+            {
+                return false;
+            }
+
+            _finishedProcessing = true;
+            return true;
         }
     }
 }

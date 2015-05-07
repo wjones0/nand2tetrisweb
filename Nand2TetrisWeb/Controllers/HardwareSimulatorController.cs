@@ -1,5 +1,6 @@
 ﻿using ChipProcessing;
 using Contracts;
+using Nand2TetrisWeb.DAL;
 using Nand2TetrisWeb.Models;
 using Newtonsoft.Json;
 using System;
@@ -31,7 +32,9 @@ namespace Nand2TetrisWeb.Controllers
             if (file==null || file.userid != GetUserID())
                 return Json(new List<string>());
 
-            var ch = ChipParser.Parse(file.FileBody);
+            var sourcefiles = new ChipFileFetcher(GetUserID());
+
+            var ch = ChipParser.Parse(file.FileBody,sourcefiles.FetchFiles());
             if (ch == null)
                 return Json(new List<string>());
 
@@ -54,17 +57,23 @@ namespace Nand2TetrisWeb.Controllers
             if (file == null || file.userid != GetUserID())
                 return Json(new List<string>());
 
-            var ch = ChipParser.Parse(file.FileBody);
+            var sourcefiles = new ChipFileFetcher(GetUserID());
+
+            var ch = ChipParser.Parse(file.FileBody, sourcefiles.FetchFiles());
 
             if(ch==null)
                 return Json(new List<string>());
 
+            var inputDict = new Dictionary<string, string>();
+
             for (int i = 0; i < inputIDs.Length; i++)
             {
                 ch.Inputs[inputIDs[i]] = inputVals[i];
+                ch.Intermediates[inputIDs[i]] = inputVals[i];
+                inputDict[inputIDs[i]] = inputVals[i];
             }
 
-            ch.ProcessChip();
+            ch.ProcessChip(inputDict);
 
             return Json(JsonConvert.SerializeObject( ch.Outputs ));
         }

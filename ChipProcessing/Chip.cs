@@ -10,16 +10,21 @@ namespace ChipProcessing
     {
 
         private Dictionary<string, string> _inputs, _outputs, _intermediates;
-        private Dictionary<Chip, Dictionary<string, string>> _partList;
+        //private Dictionary<Chip, Dictionary<string, string>> _partList;
+        private List<Chip> _partList;
+        private Dictionary<string, string> _wiring = new Dictionary<string, string>();
+
+        private string _chipName;
         protected bool _finishedProcessing;
 
 
-        public Chip(List<string> inputs, List<string> outputs)
+        public Chip(string ChipName, List<string> inputs, List<string> outputs)
         {
+            _chipName = ChipName;
             _inputs = new Dictionary<string, string>();
             _outputs = new Dictionary<string, string>();
             _intermediates = new Dictionary<string, string>();
-            _partList = new Dictionary<Chip, Dictionary<string, string>>();
+            _partList = new List<Chip>();  // new Dictionary<Chip, Dictionary<string, string>>();
 
             foreach (var i in inputs)
                 _inputs[i] = null;
@@ -37,16 +42,18 @@ namespace ChipProcessing
 
         public Dictionary<string, string> Intermediates { get { return _intermediates; } }
 
+        public Dictionary<string, string> Wiring { get { return _wiring; } }
 
 
-        public virtual bool ProcessChip()
+
+        public virtual bool ProcessChip(Dictionary<string,string> inputValues)
         {
 
             if (_finishedProcessing)
                 return false;
 
             // go through each chip wiring up inputs
-            wireInputs();
+            wireInputs(inputValues);
 
             bool processed;
 
@@ -54,12 +61,20 @@ namespace ChipProcessing
             {
                 processed = false;
 
-                wireIntermediates();
-
                 // Process all chips...
-                foreach (var c in _partList.Keys)
+                foreach (var c in _partList)
                 {
-                    processed = c.ProcessChip() || processed;
+                    bool pro = c.ProcessChip(Intermediates);
+                    if(pro)
+                    {
+                        foreach(var o in c.Outputs.Keys)
+                        {
+                            var w = c.Wiring[o];
+                            if (!Intermediates.ContainsKey(w))
+                                Intermediates[w] = c.Outputs[o];
+                        }
+                    }
+                    processed = pro || processed;
                 }
 
                 // Get output
@@ -67,28 +82,11 @@ namespace ChipProcessing
 
             } while (!outputsDefined() && processed);
 
-
+            _finishedProcessing = outputsDefined();
             return outputsDefined();
         }
 
-        private void wireIntermediates()
-        {
-            foreach (var c in _partList.Keys)
-            {
-                var workingWiring = _partList[c];
-                // each input in a chip needs its value updated
-                var tempKeys = (from tk in new List<string>(c.Inputs.Keys)
-                                where c.Inputs[tk] == null
-                                select tk).ToList();
-                foreach (var i in tempKeys)
-                {
-                    var outerValue = workingWiring[i];
-                    if (Intermediates.ContainsKey(outerValue))
-                        c.Inputs[i] = Intermediates[outerValue];
-                }
-
-            }
-        }
+      
 
         private bool outputsDefined()
         {
@@ -97,55 +95,48 @@ namespace ChipProcessing
 
         private void wireOutputs()
         {
-            foreach (var c in _partList.Keys)
+            foreach(var i in Intermediates.Keys)
             {
-                var workingWiring = _partList[c];
-
-                var tempKeys = new List<string>(c.Outputs.Keys);
-
-                foreach (var o in tempKeys)
-                {
-                    var inValue = workingWiring[o];
-                    if (Outputs.ContainsKey(inValue))
-                    {
-                        Outputs[inValue] = c.Outputs[o];
-                    }
-                    Intermediates[inValue] = c.Outputs[o];
-                }
+                if (Outputs.ContainsKey(i))
+                    Outputs[i] = Intermediates[i];
             }
+            
         }
 
-        private void wireInputs()
+        protected void wireInputs(Dictionary<string,string> inputValues)
         {
-            foreach (var c in _partList.Keys)
+            foreach(var i in inputValues.Keys)
             {
-                var workingWiring = _partList[c];
-                // each input in a chip needs its value updated
-                var tempKeys = new List<string>(c.Inputs.Keys);
-                foreach (var i in tempKeys)
-                {
-                    var outerValue = workingWiring[i];
-                    if(Inputs.ContainsKey(outerValue))
-                        c.Inputs[i] = Inputs[outerValue];
-                }
 
+                if(Wiring.ContainsValue(i))
+                {
+                    var keys = (from w in Wiring
+                                where w.Value == i
+                                select w.Key).ToList();
+                    foreach (var key in keys)
+                    {
+                        Inputs[key] = inputValues[i];
+                        Intermediates[key] = inputValues[i];
+                    }
+                }
             }
+            
         }
 
 
 
         public void AddChip(Chip c, string p)
         {
-            Dictionary<string, string> wiring = new Dictionary<string, string>();
+            
             var separateWires = p.Split(',').ToList<string>();
 
             foreach (var w in separateWires)
             {
                 var split = w.Split('=');
-                wiring[split[0]] = split[1];
+                c.Wiring[split[0]] = split[1];
             }
 
-            _partList.Add(c, wiring);
+            _partList.Add(c);
         }
 
     }

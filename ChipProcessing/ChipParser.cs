@@ -10,8 +10,10 @@ namespace ChipProcessing
     public class ChipParser
     {
 
-        public static Chip Parse(string chipText)
+        public static Chip Parse(string chipText, Dictionary<string,string> otherChips)
         {
+            if (String.IsNullOrEmpty(chipText)) return null;
+
             chipText = RemoveCommentsAndWhiteSpace(chipText);
 
             var firstLevelRegex = new Regex(@"CHIP(\w+)\{IN([\w,]+);OUT([\w,]+);PARTS:([\w,()=\[\];]+)\}");   
@@ -26,7 +28,7 @@ namespace ChipProcessing
 
 
 
-                Chip c = new Chip(inputs.Split(',').ToList<string>(),outputs.Split(',').ToList<string>());
+                Chip c = new Chip(chipName,inputs.Split(',').ToList<string>(),outputs.Split(',').ToList<string>());
 
 
                 var partListRegex = new Regex(@"(\w+)\(([\w+=\w+,]+)\);");
@@ -40,6 +42,10 @@ namespace ChipProcessing
                         if (match.Groups[1].Value == "Nand")
                         {
                             c.AddChip(new Nand(), match.Groups[2].Value);
+                        }
+                        else
+                        {
+                            c.AddChip(ChipParser.Parse(otherChips[match.Groups[1].Value],otherChips),match.Groups[2].Value);
                         }
                     }
                     match = match.NextMatch();

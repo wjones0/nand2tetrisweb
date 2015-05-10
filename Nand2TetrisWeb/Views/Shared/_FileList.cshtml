@@ -1,4 +1,12 @@
 ﻿
+
+<div id="fileTypePicker" class="input-group">
+    <span class="input-group-btn">
+        <button class="btn btn-default" type="button" onclick="GetExistingFiles('.hdl')">.hdl</button>
+        <button class="btn btn-default" type="button" onclick="GetExistingFiles('.tst')">.tst</button>
+        <button class="btn btn-default" type="button" onclick="GetExistingFiles('.cmp')">.cmp</button>
+    </span>
+</div>
 <div id="newFileGroup" class="input-group">
     <input id="newFileName" class="form-control" />
     <span class="input-group-btn">
@@ -32,7 +40,7 @@
     }
 
 
-    function GetExistingFiles()
+    function GetExistingFiles(filetype)
     {
         $("#fileListing").empty();
         $("#fileListing").append('<img src="../../Content/images/ajax-loader.gif" alt="" />');
@@ -43,7 +51,8 @@
             success: function (data) {                
                 $("#fileListing").empty();
                 $.each(data, function (i, item) {
-                    $("#fileListing").append('<li onclick="loadFile('+item.id+')">' + item.FileName + "</li>");
+                    if(item.FileName.indexOf(filetype) > -1)
+                        $("#fileListing").append('<li onclick="loadFile('+item.id+')">' + item.FileName + "</li>");
                 });
             }
 
@@ -52,7 +61,7 @@
 
 
     $(document).ready(function () {
-        GetExistingFiles();
+        //GetExistingFiles();
     });
 
 </script>

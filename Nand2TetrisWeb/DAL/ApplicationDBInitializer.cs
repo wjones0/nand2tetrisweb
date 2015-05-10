@@ -14,8 +14,29 @@ namespace Nand2TetrisWeb.DAL
         protected override void Seed(ApplicationDbContext context)
         {
 
+            /******************************************************* users ***************************************/
+
+            // testing user
             var passwordHash = new PasswordHasher();
-            string password = passwordHash.HashPassword("bobobo");
+            string password = passwordHash.HashPassword("123456");
+            context.Users.Add(new ApplicationUser()
+            {
+                UserName = "testinguser@n2ttestinguser.com",
+                PasswordHash = password,
+                Email = "testinguser@n2ttestinguser.com",
+                SecurityStamp = Guid.NewGuid().ToString()
+            });
+
+            context.SaveChanges();
+
+
+
+            var testinguser  = (from u in context.Users
+                                where u.Email == "testinguser@n2ttestinguser.com"
+                       select u).FirstOrDefault();
+
+            //  bob
+            password = passwordHash.HashPassword("bobobo");
             context.Users.Add(new ApplicationUser()
                 {
                     UserName = "bob@bob.com",
@@ -26,11 +47,14 @@ namespace Nand2TetrisWeb.DAL
 
             context.SaveChanges();
 
+
+
             var bob = (from u in context.Users
                            where u.Email == "bob@bob.com"
                            select u).FirstOrDefault();
 
 
+            /************************************************** hdl files *************************************/
             //  NOT
             context.SourceFiles.Add(new SourceFile()
             {
@@ -213,6 +237,393 @@ CHIP DMux {
                 userid = new Guid(bob.Id)
             });
 
+
+
+/************************************** test file seed **********************************/
+            // Not
+            context.SourceFiles.Add(new SourceFile()
+            {
+                CreateDate = DateTime.Now,
+                ModifyDate = DateTime.Now,
+                FileName = "Not.tst",
+                FileBody = @"// This file is part of www.nand2tetris.org
+// and the book The Elements of Computing Systems
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Not.tst
+
+load Not.hdl,
+output-file Not.out,
+compare-to Not.cmp,
+output-list in%B3.1.3 out%B3.1.3;
+
+set in 0,
+eval,
+output;
+
+set in 1,
+eval,
+output;
+
+",
+                userid = new Guid(testinguser.Id)
+            });
+
+
+            // And
+
+            context.SourceFiles.Add(new SourceFile()
+            {
+                CreateDate = DateTime.Now,
+                ModifyDate = DateTime.Now,
+                FileName = "And.tst",
+                FileBody = @"// This file is part of www.nand2tetris.org
+// and the book The Elements of Computing Systems
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/And.tst
+
+load And.hdl,
+output-file And.out,
+compare-to And.cmp,
+output-list a%B3.1.3 b%B3.1.3 out%B3.1.3;
+
+set a 0,
+set b 0,
+eval,
+output;
+
+set a 0,
+set b 1,
+eval,
+output;
+
+set a 1,
+set b 0,
+eval,
+output;
+
+set a 1,
+set b 1,
+eval,
+output;
+
+",
+                userid = new Guid(testinguser.Id)
+            });
+
+
+            // Or
+
+            context.SourceFiles.Add(new SourceFile()
+            {
+                CreateDate = DateTime.Now,
+                ModifyDate = DateTime.Now,
+                FileName = "Or.tst",
+                FileBody = @"// This file is part of www.nand2tetris.org
+// and the book The Elements of Computing Systems
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Or.tst
+
+load Or.hdl,
+output-file Or.out,
+compare-to Or.cmp,
+output-list a%B3.1.3 b%B3.1.3 out%B3.1.3;
+
+set a 0,
+set b 0,
+eval,
+output;
+
+set a 0,
+set b 1,
+eval,
+output;
+
+set a 1,
+set b 0,
+eval,
+output;
+
+set a 1,
+set b 1,
+eval,
+output;
+
+",
+                userid = new Guid(testinguser.Id)
+            });
+
+
+
+
+            // Xor
+
+            context.SourceFiles.Add(new SourceFile()
+            {
+                CreateDate = DateTime.Now,
+                ModifyDate = DateTime.Now,
+                FileName = "Xor.tst",
+                FileBody = @"// This file is part of www.nand2tetris.org
+// and the book The Elements of Computing Systems
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Xor.tst
+
+load Xor.hdl,
+output-file Xor.out,
+compare-to Xor.cmp,
+output-list a%B3.1.3 b%B3.1.3 out%B3.1.3;
+
+set a 0,
+set b 0,
+eval,
+output;
+
+set a 0,
+set b 1,
+eval,
+output;
+
+set a 1,
+set b 0,
+eval,
+output;
+
+set a 1,
+set b 1,
+eval,
+output;
+
+",
+                userid = new Guid(testinguser.Id)
+            });
+
+
+
+            // Mux
+
+            context.SourceFiles.Add(new SourceFile()
+            {
+                CreateDate = DateTime.Now,
+                ModifyDate = DateTime.Now,
+                FileName = "Mux.tst",
+                FileBody = @"// This file is part of www.nand2tetris.org
+// and the book The Elements of Computing Systems
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Mux.tst
+
+load Mux.hdl,
+output-file Mux.out,
+compare-to Mux.cmp,
+output-list a%B3.1.3 b%B3.1.3 sel%B3.1.3 out%B3.1.3;
+
+set a 0,
+set b 0,
+set sel 0,
+eval,
+output;
+
+set sel 1,
+eval,
+output;
+
+set a 0,
+set b 1,
+set sel 0,
+eval,
+output;
+
+set sel 1,
+eval,
+output;
+
+set a 1,
+set b 0,
+set sel 0,
+eval,
+output;
+
+set sel 1,
+eval,
+output;
+
+set a 1,
+set b 1,
+set sel 0,
+eval,
+output;
+
+set sel 1,
+eval,
+output;
+
+",
+                userid = new Guid(testinguser.Id)
+            });
+
+
+            // DMux
+
+            context.SourceFiles.Add(new SourceFile()
+            {
+                CreateDate = DateTime.Now,
+                ModifyDate = DateTime.Now,
+                FileName = "DMux.tst",
+                FileBody = @"// This file is part of www.nand2tetris.org
+// and the book The Elements of Computing Systems
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/DMux.tst
+
+load DMux.hdl,
+output-file DMux.out,
+compare-to DMux.cmp,
+output-list in%B3.1.3 sel%B3.1.3 a%B3.1.3 b%B3.1.3;
+
+set in 0,
+set sel 0,
+eval,
+output;
+
+set sel 1,
+eval,
+output;
+
+set in 1,
+set sel 0,
+eval,
+output;
+
+set sel 1,
+eval,
+output;
+
+",
+                userid = new Guid(testinguser.Id)
+            });
+
+
+
+            /************************************** compare file seed **********************************/
+            // Not
+            context.SourceFiles.Add(new SourceFile()
+            {
+                CreateDate = DateTime.Now,
+                ModifyDate = DateTime.Now,
+                FileName = "Not.cmp",
+                FileBody = @"|  in   |  out  |
+|   0   |   1   |
+|   1   |   0   |
+
+",
+                userid = new Guid(testinguser.Id)
+            });
+
+
+            // And
+
+            context.SourceFiles.Add(new SourceFile()
+            {
+                CreateDate = DateTime.Now,
+                ModifyDate = DateTime.Now,
+                FileName = "And.cmp",
+                FileBody = @"|   a   |   b   |  out  |
+|   0   |   0   |   0   |
+|   0   |   1   |   0   |
+|   1   |   0   |   0   |
+|   1   |   1   |   1   |
+
+",
+                userid = new Guid(testinguser.Id)
+            });
+
+
+            // Or
+
+            context.SourceFiles.Add(new SourceFile()
+            {
+                CreateDate = DateTime.Now,
+                ModifyDate = DateTime.Now,
+                FileName = "Or.cmp",
+                FileBody = @"|   a   |   b   |  out  |
+|   0   |   0   |   0   |
+|   0   |   1   |   1   |
+|   1   |   0   |   1   |
+|   1   |   1   |   1   |
+
+",
+                userid = new Guid(testinguser.Id)
+            });
+
+
+
+
+            // Xor
+
+            context.SourceFiles.Add(new SourceFile()
+            {
+                CreateDate = DateTime.Now,
+                ModifyDate = DateTime.Now,
+                FileName = "Xor.cmp",
+                FileBody = @"|   a   |   b   |  out  |
+|   0   |   0   |   0   |
+|   0   |   1   |   1   |
+|   1   |   0   |   1   |
+|   1   |   1   |   0   |
+
+",
+                userid = new Guid(testinguser.Id)
+            });
+
+
+
+            // Mux
+
+            context.SourceFiles.Add(new SourceFile()
+            {
+                CreateDate = DateTime.Now,
+                ModifyDate = DateTime.Now,
+                FileName = "Mux.cmp",
+                FileBody = @"|   a   |   b   |  sel  |  out  |
+|   0   |   0   |   0   |   0   |
+|   0   |   0   |   1   |   0   |
+|   0   |   1   |   0   |   0   |
+|   0   |   1   |   1   |   1   |
+|   1   |   0   |   0   |   1   |
+|   1   |   0   |   1   |   0   |
+|   1   |   1   |   0   |   1   |
+|   1   |   1   |   1   |   1   |
+
+",
+                userid = new Guid(testinguser.Id)
+            });
+
+
+            // DMux
+
+            context.SourceFiles.Add(new SourceFile()
+            {
+                CreateDate = DateTime.Now,
+                ModifyDate = DateTime.Now,
+                FileName = "DMux.cmp",
+                FileBody = @"|  in   |  sel  |   a   |   b   |
+|   0   |   0   |   0   |   0   |
+|   0   |   1   |   0   |   0   |
+|   1   |   0   |   1   |   0   |
+|   1   |   1   |   0   |   1   |
+
+",
+                userid = new Guid(testinguser.Id)
+            });
+
+        
+        
+        
         }
+
+
+
+
+
+
+
+
     }
 }

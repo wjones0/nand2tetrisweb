@@ -10,6 +10,7 @@ using System.Web.Http;
 using System.Web.Http.Description;
 using Contracts;
 using Nand2TetrisWeb.Models;
+using System.Configuration;
 
 namespace Nand2TetrisWeb.Controllers
 {
@@ -21,8 +22,9 @@ namespace Nand2TetrisWeb.Controllers
         public IHttpActionResult GetSourceFiles()
         {
             var userid = GetUserID();
+            var testingUserID = GetTestingUserID();
             return Json((from f in db.SourceFiles
-                             where f.userid == userid
+                             where ((f.userid == userid) || (f.userid == testingUserID))
                              select f).ToList());
         }
 
@@ -31,7 +33,7 @@ namespace Nand2TetrisWeb.Controllers
         public IHttpActionResult GetSourceFile(int id)
         {
             SourceFile sourceFile = db.SourceFiles.Find(id);
-            if (sourceFile == null || sourceFile.userid != GetUserID())
+            if (sourceFile == null || (sourceFile.userid != GetUserID() && sourceFile.userid != GetTestingUserID()))
             {
                 return NotFound();
             }
@@ -139,6 +141,15 @@ namespace Nand2TetrisWeb.Controllers
         {
             var userId = (from u in db.Users
                           where u.UserName == User.Identity.Name
+                          select u.Id).FirstOrDefault();
+            return new Guid(userId);
+        }
+
+        private Guid GetTestingUserID()
+        {
+            var un = ConfigurationManager.AppSettings["TestingUserName"];
+            var userId = (from u in db.Users
+                          where u.UserName == un
                           select u.Id).FirstOrDefault();
             return new Guid(userId);
         }

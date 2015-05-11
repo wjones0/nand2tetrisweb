@@ -22,3 +22,15 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.glyph-blue {
+    color: blue;
+}
+
+.glyph-red {
+    color: red;
+}
+
+.glyph-green {
+    color: green;
+}

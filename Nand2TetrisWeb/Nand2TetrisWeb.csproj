@@ -248,6 +248,8 @@
     <Content Include="Views\Shared\_FileList.cshtml" />
     <Content Include="Views\Shared\_FileContents.cshtml" />
     <Content Include="Views\Shared\_ChipInputsAndOutputs.cshtml" />
+    <Content Include="Views\Shared\_TestScript.cshtml" />
+    <Content Include="Views\Shared\_TestStatus.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

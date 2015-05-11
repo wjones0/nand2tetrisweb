@@ -1,0 +1,56 @@
+﻿
+
+<div id="testScriptArea" class="input-group">
+    <img src="../../Content/images/ajax-loader.gif" alt="" id="testFileSpinner" hidden />
+
+    <textarea id="testFileBody" class="input-lg"></textarea>
+
+    <button class="btn btn-default" type="button" onclick="runTestScript()">Run Tests (random results for now)</button>
+</div>
+
+
+<script type="text/javascript">
+
+
+    function loadTestFile(fileID) {
+        $("#testFileSpinner").show();
+        $.ajax({
+            type: 'GET',
+            url: 'api/SourceFiles/' + fileID,
+            datatype: 'json',
+            success: function (data) {
+                $("#testFileSpinner").hide();
+                $("#testFileBody").val(data.FileBody);
+                populateStatusTable(data.FileBody);
+            }
+
+        });
+    }
+
+    function runTestScript()
+    {
+        $("#testStatusTable").find('span').each(function (i, item) {
+            if(Math.random() < 0.5)
+            {
+                passTest(item);
+            } else
+            {
+                failTest(item);
+            }
+        });
+    }
+
+    function passTest(testcase)
+    {
+        testcase.removeAttribute('class');
+        testcase.setAttribute('class', 'glyphicon glyphicon-thumbs-up glyph-green');
+    }
+
+    function failTest(testcase)
+    {
+        testcase.removeAttribute('class');
+        testcase.setAttribute('class', 'glyphicon glyphicon-thumbs-down glyph-red');
+    }
+
+</script>
+

@@ -51,8 +51,13 @@
             success: function (data) {                
                 $("#fileListing").empty();
                 $.each(data, function (i, item) {
-                    if(item.FileName.indexOf(filetype) > -1)
-                        $("#fileListing").append('<li onclick="loadFile('+item.id+')">' + item.FileName + "</li>");
+                    if (item.FileName.indexOf(filetype) > -1) {
+                        if(filetype == ".hdl")
+                            $("#fileListing").append('<li onclick="loadFile(' + item.id + ')">' + item.FileName + "</li>");
+                        else
+                            if(filetype == ".tst")
+                                $("#fileListing").append('<li onclick="loadTestFile(' + item.id + ')">' + item.FileName + "</li>");
+                    }
                 });
             }
 

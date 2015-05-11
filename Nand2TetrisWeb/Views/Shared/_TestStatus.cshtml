@@ -1,0 +1,28 @@
+﻿
+
+<div id="testStatusArea" class="input-group">
+    <img src="../../Content/images/ajax-loader.gif" alt="" id="testStatusSpinner" hidden />
+
+    <table id="testStatusTable" class="table table-responsive table-striped text-center">
+    </table>
+    
+</div>
+
+
+<script type="text/javascript">
+
+
+    function populateStatusTable(testScript)
+    {
+        $("#testStatusTable").empty();
+        $("#testStatusTable").append("<tr><th>Test</th><th>Status</th></tr>");
+        var i;
+        for(i=0; i<testScript.match(/output;/g).length; i++)
+            $("#testStatusTable").append("<tr><td>Test " + i + "</td><td><span id='testCase" + i + "' class='glyphicon glyphicon-cog glyph-blue'></span></td></tr>");
+    }
+
+
+</script>
+
+
+

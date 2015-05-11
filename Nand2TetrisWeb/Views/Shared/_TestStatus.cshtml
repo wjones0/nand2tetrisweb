@@ -5,20 +5,30 @@
 
     <table id="testStatusTable" class="table table-responsive table-striped text-center">
     </table>
-    
+    <textarea id="singleTestCase" class="input-lg"></textarea>
 </div>
 
 
 <script type="text/javascript">
 
+    var testCaseTexts;
 
     function populateStatusTable(testScript)
     {
+        $("#singleTestCase").text('');
         $("#testStatusTable").empty();
         $("#testStatusTable").append("<tr><th>Test</th><th>Status</th></tr>");
+
+        testCaseTexts = testScript.split(';');
+
         var i;
-        for(i=0; i<testScript.match(/output;/g).length; i++)
-            $("#testStatusTable").append("<tr><td>Test " + i + "</td><td><span id='testCase" + i + "' class='glyphicon glyphicon-cog glyph-blue'></span></td></tr>");
+        for(i=1; i<testCaseTexts.length-1; i++)
+            $("#testStatusTable").append("<tr onClick='showTestCase(" + i + ")'><td>Test " + i + "</td><td><span id='testCase" + i + "' class='glyphicon glyphicon-cog glyph-blue'></span></td></tr>");
+    }
+
+    function showTestCase(i)
+    {
+        $("#singleTestCase").text(testCaseTexts[i].replace(/,/g,",\n"));
     }
 
 

@@ -38,7 +38,8 @@ namespace Nand2TetrisWeb.Controllers
                 return NotFound();
             }
 
-            return Json(sourceFile);
+            return Json(new SourceFile() {CreateDate = sourceFile.CreateDate, FileBody = sourceFile.FileBody, minFileBody = ChipProcessing.ChipParser.RemoveCommentsAndWhiteSpace(sourceFile.FileBody), 
+                                                FileName = sourceFile.FileName, id = sourceFile.id, ModifyDate = sourceFile.ModifyDate, userid = sourceFile.userid});
         }
         
         // PUT: api/SourceFiles/5

@@ -57,7 +57,7 @@ namespace ChipProcessing
                 return null;
         }
 
-        private static string RemoveCommentsAndWhiteSpace(string chipText)
+        public static string RemoveCommentsAndWhiteSpace(string chipText)
         {
 
             //   http://stackoverflow.com/questions/3524317/regex-to-strip-line-comments-from-c-sharp/3524689#3524689

@@ -6,11 +6,13 @@
     <textarea id="testFileBody" class="input-lg"></textarea>
 
     <button class="btn btn-default" type="button" onclick="runTestScript()">Run Tests (random results for now)</button>
+    <button class="btn btn-default" type="button" onclick="reloadTestFile()">Reset</button>
 </div>
 
 
 <script type="text/javascript">
 
+    var currLoadedTestFileID;
 
     function loadTestFile(fileID) {
         $("#testFileSpinner").show();
@@ -20,11 +22,17 @@
             datatype: 'json',
             success: function (data) {
                 $("#testFileSpinner").hide();
+                currLoadedTestFileID = data.id;
                 $("#testFileBody").val(data.FileBody);
-                populateStatusTable(data.FileBody);
+                populateStatusTable(data.minFileBody);
             }
 
         });
+    }
+
+    function reloadTestFile()
+    {
+        loadTestFile(currLoadedTestFileID);
     }
 
     function runTestScript()
@@ -43,13 +51,13 @@
     function passTest(testcase)
     {
         testcase.removeAttribute('class');
-        testcase.setAttribute('class', 'glyphicon glyphicon-thumbs-up glyph-green');
+        testcase.setAttribute('class', 'glyphicon glyphicon-ok glyph-green');
     }
 
     function failTest(testcase)
     {
         testcase.removeAttribute('class');
-        testcase.setAttribute('class', 'glyphicon glyphicon-thumbs-down glyph-red');
+        testcase.setAttribute('class', 'glyphicon glyphicon-remove glyph-red');
     }
 
 </script>

@@ -3,6 +3,7 @@ using Microsoft.AspNet.Identity;
 using Nand2TetrisWeb.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 using System.Web;
@@ -18,21 +19,21 @@ namespace Nand2TetrisWeb.DAL
 
             // testing user
             var passwordHash = new PasswordHasher();
-            string password = passwordHash.HashPassword("123456");
+            string password = passwordHash.HashPassword(ConfigurationManager.AppSettings["TestingUserPW"]);
             context.Users.Add(new ApplicationUser()
             {
-                UserName = "testinguser@n2ttestinguser.com",
+                UserName = ConfigurationManager.AppSettings["TestingUserName"],
                 PasswordHash = password,
-                Email = "testinguser@n2ttestinguser.com",
+                Email = ConfigurationManager.AppSettings["TestingUserName"],
                 SecurityStamp = Guid.NewGuid().ToString()
             });
 
             context.SaveChanges();
 
 
-
+            var tun = ConfigurationManager.AppSettings["TestingUserName"];
             var testinguser  = (from u in context.Users
-                                where u.Email == "testinguser@n2ttestinguser.com"
+                                where u.Email == tun
                        select u).FirstOrDefault();
 
             //  bob

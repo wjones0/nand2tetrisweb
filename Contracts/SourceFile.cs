@@ -20,6 +20,8 @@ namespace Contracts
 
         public string FileBody { get; set; }
 
+        public string minFileBody { get; set; }
+
         public DateTime CreateDate { get; set; }
 
         public DateTime ModifyDate { get; set; }

@@ -59,7 +59,30 @@ namespace ChipProcessing
 
         public static string RemoveCommentsAndWhiteSpace(string chipText)
         {
+            string noComments = RemoveComments(chipText);
+            return RemoveWhiteSpace(noComments);
+        }
 
+        public static string RemoveAllComments(string chipText)
+        {
+            return RemoveBlankLines(RemoveComments(chipText));
+        }
+
+        private static string RemoveBlankLines(string subjectString)
+        {
+            return Regex.Replace(subjectString, @"^\s+$[\r\n]*", "", RegexOptions.Multiline);
+        }
+
+        private static string RemoveWhiteSpace(string noComments)
+        {
+            //   http://stackoverflow.com/questions/6219454/efficient-way-to-remove-all-whitespace-from-string/14591148#14591148
+            return new string(noComments.ToCharArray()
+               .Where(c => !Char.IsWhiteSpace(c))
+               .ToArray());
+        }
+
+        private static string RemoveComments(string chipText)
+        {
             //   http://stackoverflow.com/questions/3524317/regex-to-strip-line-comments-from-c-sharp/3524689#3524689
             var blockComments = @"/\*(.*?)\*/";
             var lineComments = @"//(.*?)\r?\n";
@@ -76,12 +99,7 @@ namespace ChipProcessing
                     return me.Value;
                 },
                 RegexOptions.Singleline);
-
-
-            //   http://stackoverflow.com/questions/6219454/efficient-way-to-remove-all-whitespace-from-string/14591148#14591148
-            return new string(noComments.ToCharArray()
-               .Where(c => !Char.IsWhiteSpace(c))
-               .ToArray());
+            return noComments;
         }
     }
 }

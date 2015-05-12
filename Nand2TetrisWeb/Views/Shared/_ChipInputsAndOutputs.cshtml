@@ -39,7 +39,7 @@
                 $("#chipOuts").empty();
                 $("#chipOuts").append('<tr><th>Output Name</th><th>Value</th></tr>');
                 $.each(data.outputs, function (i, item) {
-                    $("#chipOuts").append('<tr><td>' + item + '</td><td><span id="' + item + '"></span></td></tr>');
+                    $("#chipOuts").append('<tr><td>' + item + '</td><td><input id="' + item + '"></input></td></tr>');
                 });
             }
 
@@ -67,7 +67,7 @@
             success: function (data) {
                 var result = $.parseJSON(data);
                 $.each(result, function (k, v) {
-                    $("#" + k).text(v);
+                    $("#" + k).val(v);
 
                 });
             }

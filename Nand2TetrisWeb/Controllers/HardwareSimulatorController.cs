@@ -50,8 +50,11 @@ namespace Nand2TetrisWeb.Controllers
 
         public JsonResult FindFileByName(string fileName)
         {
+            var un = GetUserID();
+            var tun = GetTestingUserID();
+
             var file = (from f in db.SourceFiles
-                            where (f.FileName == fileName && (f.userid == GetUserID() || f.userid == GetTestingUserID()))
+                            where (f.FileName == fileName && (f.userid == un || f.userid == tun))
                             select f).FirstOrDefault();
 
             return Json (new { id = file.id });

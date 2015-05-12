@@ -22,13 +22,15 @@
         testCaseTexts = testScript.split(';');
 
         var i;
-        for(i=1; i<testCaseTexts.length-1; i++)
+        for (i = 1; i < testCaseTexts.length - 1; i++) {
             $("#testStatusTable").append("<tr onClick='showTestCase(" + i + ")'><td>Test " + i + "</td><td><span id='testCase" + i + "' class='glyphicon glyphicon-cog glyph-blue'></span></td></tr>");
+            testCaseTexts[i] = testCaseTexts[i].replace(/^\s+|\s+$/g, "");
+        }
     }
 
     function showTestCase(i)
     {
-        $("#singleTestCase").text(testCaseTexts[i].replace(/,/g,",\n"));
+        $("#singleTestCase").text(testCaseTexts[i]);
     }
 
     function passTest(testcase) {

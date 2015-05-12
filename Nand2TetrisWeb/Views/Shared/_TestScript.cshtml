@@ -5,7 +5,7 @@
 
     <textarea id="testFileBody" class="input-lg"></textarea>
 
-    <button class="btn btn-default" type="button" onclick="runTestScript()">Run Tests (random results for now)</button>
+    <button class="btn btn-default" type="button" onclick="runTestScript()">Run Tests</button>
     <button class="btn btn-default" type="button" onclick="reloadTestFile()">Reset</button>
 
     <img src="../../Content/images/ajax-loader.gif" alt="" id="compareFileSpinner" hidden />
@@ -16,7 +16,9 @@
 
 <script type="text/javascript">
 
+    //  File stuff
     var currLoadedTestFileID;
+    var compareValues;
 
     function loadTestFile(fileID) {
         $("#testFileSpinner").show();
@@ -34,22 +36,8 @@
         });
     }
 
-    function reloadTestFile()
-    {
+    function reloadTestFile() {
         loadTestFile(currLoadedTestFileID);
-    }
-
-    function runTestScript()
-    {
-        $("#testStatusTable").find('span').each(function (i, item) {
-            if(Math.random() < 0.5)
-            {
-                passTest(item);
-            } else
-            {
-                failTest(item);
-            }
-        });
     }
 
 
@@ -62,11 +50,97 @@
             success: function (data) {
                 $("#compareFileSpinner").hide();
                 $("#compareFileBody").val(data.FileBody);
+                compareValues = data.FileBody.trim().split('\n');
             }
 
         });
     }
 
+
+    function loadFileByName(fileName) {
+        $.ajax({
+            type: 'POST',
+            url: 'HardwareSimulator/FindFileByName',
+            datatype: 'json',
+            data: { fileName: fileName },
+            success: function (data) {
+                if (fileName.indexOf(".hdl") > -1) {
+                    loadFile(data.id);
+                }
+                else {
+                    loadCompareFile(data.id);
+                }
+            }
+
+        });
+    }
+
+    // Running test scripts
+
+    var currentTest;
+
+    function runTestScript() {
+        currentTest = 1;
+        $.ajaxSetup({ async: false });
+
+        filesToLoad = testCaseTexts[0].split(',');
+        hdlFile = filesToLoad[0].split(' ')[1];
+        cmpFile = filesToLoad[2].split(' ')[1];
+
+
+        loadFileByName(cmpFile);
+        loadFileByName(hdlFile);
+
+        while (currentTest < testCaseTexts.length-1)
+        {
+            runNextTest();
+        }
+
+        $.ajaxSetup({ async: true });
+    }
+
+    function runNextTest() {
+        testCaseStatements = testCaseTexts[currentTest].split('\n');
+        
+        for (var i = 0; i < testCaseStatements.length; i++) {
+
+            currStatementParse = testCaseStatements[i].split(' ');
+
+            if (currStatementParse[0] == "set") {
+                $("#" + currStatementParse[1]).val(currStatementParse[2].replace(',',''));
+            }
+        }
+
+        processChip();
+
+        compareResults();
+
+        currentTest++;
+
+    }
+
+
+    function compareResults()
+    {
+        fieldNames = compareValues[0].replace(/\s+/g, '').trim();
+        fieldNames = fieldNames.substring(1, fieldNames.length - 1).split('|');
+
+        correctValues = compareValues[currentTest].replace(/\s+/g, '').trim();
+        correctValues = correctValues.substring(1,correctValues.length-1).split('|');
+
+        testPassed = true;
+        for(var i=0; i<correctValues.length; i++)
+        {
+            testPassed = testPassed && ($("#" + fieldNames[i]).val() == correctValues[i]);
+        }
+
+        if (testPassed)
+        {
+            passTest($("#testStatusTable").find('span')[currentTest - 1]);
+        }
+        else
+            failTest($("#testStatusTable").find('span')[currentTest - 1]);
+    }
 
 </script>
 

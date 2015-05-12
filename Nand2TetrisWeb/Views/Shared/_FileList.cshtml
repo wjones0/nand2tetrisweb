@@ -57,6 +57,9 @@
                         else
                             if(filetype == ".tst")
                                 $("#fileListing").append('<li onclick="loadTestFile(' + item.id + ')">' + item.FileName + "</li>");
+                            else
+                                if(filetype == ".cmp")
+                                    $("#fileListing").append('<li onclick="loadCompareFile(' + item.id + ')">' + item.FileName + "</li>");
                     }
                 });
             }

@@ -5,6 +5,7 @@ using Nand2TetrisWeb.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -46,6 +47,15 @@ namespace Nand2TetrisWeb.Controllers
             return Json(pf);
         }
 
+
+        public JsonResult FindFileByName(string fileName)
+        {
+            var file = (from f in db.SourceFiles
+                            where (f.FileName == fileName && (f.userid == GetUserID() || f.userid == GetTestingUserID()))
+                            select f).FirstOrDefault();
+
+            return Json (new { id = file.id });
+        }
 
 
         public JsonResult ProcessChip(string fileid, string[] inputIDs, string[] inputVals)
@@ -90,6 +100,16 @@ namespace Nand2TetrisWeb.Controllers
         }
 
 
-
+        private Guid GetTestingUserID()
+        {
+            var un = ConfigurationManager.AppSettings["TestingUserName"];
+            var userId = (from u in db.Users
+                          where u.UserName == un
+                          select u.Id).FirstOrDefault();
+            return new Guid(userId);
+        }
     }
+
+
+    
 }

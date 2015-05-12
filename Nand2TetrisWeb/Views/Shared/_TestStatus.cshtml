@@ -31,6 +31,16 @@
         $("#singleTestCase").text(testCaseTexts[i].replace(/,/g,",\n"));
     }
 
+    function passTest(testcase) {
+        testcase.removeAttribute('class');
+        testcase.setAttribute('class', 'glyphicon glyphicon-ok glyph-green');
+    }
+
+    function failTest(testcase) {
+        testcase.removeAttribute('class');
+        testcase.setAttribute('class', 'glyphicon glyphicon-remove glyph-red');
+    }
+
 
 </script>
 

@@ -7,6 +7,10 @@
 
     <button class="btn btn-default" type="button" onclick="runTestScript()">Run Tests (random results for now)</button>
     <button class="btn btn-default" type="button" onclick="reloadTestFile()">Reset</button>
+
+    <img src="../../Content/images/ajax-loader.gif" alt="" id="compareFileSpinner" hidden />
+
+    <textarea id="compareFileBody" class="input-lg"></textarea>
 </div>
 
 
@@ -48,17 +52,21 @@
         });
     }
 
-    function passTest(testcase)
-    {
-        testcase.removeAttribute('class');
-        testcase.setAttribute('class', 'glyphicon glyphicon-ok glyph-green');
+
+    function loadCompareFile(fileID) {
+        $("#compareFileSpinner").show();
+        $.ajax({
+            type: 'GET',
+            url: 'api/SourceFiles/' + fileID,
+            datatype: 'json',
+            success: function (data) {
+                $("#compareFileSpinner").hide();
+                $("#compareFileBody").val(data.FileBody);
+            }
+
+        });
     }
 
-    function failTest(testcase)
-    {
-        testcase.removeAttribute('class');
-        testcase.setAttribute('class', 'glyphicon glyphicon-remove glyph-red');
-    }
 
 </script>
 

@@ -29,7 +29,7 @@
 
             statusCode: {
                 201: function (data) {
-                    GetExistingFiles();
+                    GetExistingFiles(fileName.substring(fileName.length-4,fileName.length));
                     $("#newFileName").val("");
                 }
             },

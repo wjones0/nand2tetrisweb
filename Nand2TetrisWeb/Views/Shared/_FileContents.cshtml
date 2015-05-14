@@ -25,7 +25,13 @@
                 $("#fileID").val(data.id);
                 $("#fileName").val(data.FileName);
                 parseFile(data.id);
+                everythingLoaded = false;
 
+            },
+            error: function (data) {
+                $("#fileContentsSpinner").hide();
+                $("#fileBody").val("Error loading file");
+                everythingLoaded = false;
             }
 
         });

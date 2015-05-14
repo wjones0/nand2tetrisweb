@@ -32,12 +32,22 @@
                 currLoadedTestFileID = data.id;
                 $("#testFileBody").val(data.FileBody);
                 populateStatusTable(data.minFileBody);
+            },
+            error: function (data) {
+                $("#testFileSpinner").hide();
+                $("#testFileBody").val("Error loading file");
+                currLoadedTestFileID = null;
+
             }
 
         });
     }
 
     function reloadTestFile() {
+        everythingLoaded = false;
+        if (currLoadedTestFileID == null || $("#fileBody").val() == "Error loading file")
+            return;
+
         loadTestFile(currLoadedTestFileID);
         loadCompareFile(currLoadedCompFileID);
         currentTest = 1;
@@ -56,7 +66,13 @@
                 $("#compareFileBody").val(data.FileBody);
                 currLoadedCompFileID = data.id;
                 compareValues = data.FileBody.trim().split('\n');
+            },
+            error: function(data) {
+                $("#compareFileSpinner").hide();
+                $("#compareFileBody").val("Error loading file");
+                currLoadedCompFileID = null;
             }
+        
 
         });
     }
@@ -104,20 +120,31 @@
     }
 
     function runTestScript() {
+        if (currLoadedTestFileID == null)
+            return;
+
         if (!everythingLoaded)
             loadAllTestFiles();
+
+        if ($("#fileBody").val() == "Error loading file")
+            return;
+
 
         while (currentTest < testCaseTexts.length - 1)
         {
             runNextTest();
         }
-
+        everythingLoaded = false;
     }
 
     function runNextTest() {
+        if (currLoadedTestFileID == null)
+            return;
+
         if (!everythingLoaded)
             loadAllTestFiles();
-        if (currentTest >= testCaseTexts.length-1)
+
+        if (currentTest >= testCaseTexts.length - 1 || $("#fileBody").val() == "Error loading file")
             return;
 
         $.ajaxSetup({ async: false });

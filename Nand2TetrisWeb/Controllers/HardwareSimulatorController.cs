@@ -56,6 +56,8 @@ namespace Nand2TetrisWeb.Controllers
             var file = (from f in db.SourceFiles
                             where (f.FileName == fileName && (f.userid == un || f.userid == tun))
                             select f).FirstOrDefault();
+            if (file == null)
+                return Json(HttpNotFound());
 
             return Json (new { id = file.id });
         }

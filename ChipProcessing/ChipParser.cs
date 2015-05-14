@@ -59,17 +59,26 @@ namespace ChipProcessing
 
         public static string RemoveCommentsAndWhiteSpace(string chipText)
         {
+            if (String.IsNullOrEmpty(chipText))
+                return null;
+
             string noComments = RemoveComments(chipText);
             return RemoveWhiteSpace(noComments);
         }
 
         public static string RemoveAllComments(string chipText)
         {
+            if (String.IsNullOrEmpty(chipText))
+                return null;
+
             return RemoveBlankLines(RemoveComments(chipText));
         }
 
         private static string RemoveBlankLines(string subjectString)
         {
+            if (String.IsNullOrEmpty(subjectString))
+                return null;
+
             return Regex.Replace(subjectString, @"^\s+$[\r\n]*", "", RegexOptions.Multiline);
         }
 
@@ -83,6 +92,9 @@ namespace ChipProcessing
 
         private static string RemoveComments(string chipText)
         {
+            if (String.IsNullOrEmpty(chipText))
+                return null;
+
             //   http://stackoverflow.com/questions/3524317/regex-to-strip-line-comments-from-c-sharp/3524689#3524689
             var blockComments = @"/\*(.*?)\*/";
             var lineComments = @"//(.*?)\r?\n";

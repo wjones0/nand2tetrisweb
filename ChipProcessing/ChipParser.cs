@@ -16,7 +16,7 @@ namespace ChipProcessing
 
             chipText = RemoveCommentsAndWhiteSpace(chipText);
 
-            var firstLevelRegex = new Regex(@"CHIP(\w+)\{IN([\w,]+);OUT([\w,]+);PARTS:([\w,()=\[\];]+)\}");   
+            var firstLevelRegex = new Regex(@"CHIP(\w+)\{IN([\w\[\],]+);OUT([\w\[\],]+);PARTS:([\w,()=\[\];]+)\}");   
 
             var matched = firstLevelRegex.Match(chipText);
             if (matched.Success)
@@ -31,7 +31,7 @@ namespace ChipProcessing
                 Chip c = new Chip(chipName,inputs.Split(',').ToList<string>(),outputs.Split(',').ToList<string>());
 
 
-                var partListRegex = new Regex(@"(\w+)\(([\w+=\w+,]+)\);");
+                var partListRegex = new Regex(@"(\w+)\(([\w+=\w+,\[\]]+)\);");
                 var partList = partListRegex.Match(parts);
                 var match = partList;
                 

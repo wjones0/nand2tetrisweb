@@ -4,8 +4,8 @@
     <img src="../../Content/images/ajax-loader.gif" alt="" id="testFileSpinner" hidden />
 
     <textarea id="testFileBody" class="input-lg"></textarea>
-
-    <button class="btn btn-default" type="button" onclick="runTestScript()">Run Tests</button>
+    <button class="btn btn-default" type="button" onclick="runNextTest()">Run Next Test</button>
+    <button class="btn btn-default" type="button" onclick="runTestScript()">Run All Tests</button>
     <button class="btn btn-default" type="button" onclick="reloadTestFile()">Reset</button>
 
     <img src="../../Content/images/ajax-loader.gif" alt="" id="compareFileSpinner" hidden />
@@ -18,6 +18,7 @@
 
     //  File stuff
     var currLoadedTestFileID;
+    var currLoadedCompFileID;
     var compareValues;
 
     function loadTestFile(fileID) {
@@ -38,6 +39,9 @@
 
     function reloadTestFile() {
         loadTestFile(currLoadedTestFileID);
+        loadCompareFile(currLoadedCompFileID);
+        currentTest = 1;
+        $("#compareFileBody").val('');
     }
 
 
@@ -50,6 +54,7 @@
             success: function (data) {
                 $("#compareFileSpinner").hide();
                 $("#compareFileBody").val(data.FileBody);
+                currLoadedCompFileID = data.id;
                 compareValues = data.FileBody.trim().split('\n');
             }
 
@@ -78,8 +83,10 @@
     // Running test scripts
 
     var currentTest;
+    var everythingLoaded = false;
 
-    function runTestScript() {
+    function loadAllTestFiles()
+    {
         currentTest = 1;
         $.ajaxSetup({ async: false });
 
@@ -91,15 +98,29 @@
         loadFileByName(cmpFile);
         loadFileByName(hdlFile);
 
-        while (currentTest < testCaseTexts.length-1)
+        $.ajaxSetup({ async: true });
+
+        everythingLoaded = true;
+    }
+
+    function runTestScript() {
+        if (!everythingLoaded)
+            loadAllTestFiles();
+
+        while (currentTest < testCaseTexts.length - 1)
         {
             runNextTest();
         }
 
-        $.ajaxSetup({ async: true });
     }
 
     function runNextTest() {
+        if (!everythingLoaded)
+            loadAllTestFiles();
+        if (currentTest >= testCaseTexts.length-1)
+            return;
+
+        $.ajaxSetup({ async: false });
         testCaseStatements = testCaseTexts[currentTest].split('\n');
         
         for (var i = 0; i < testCaseStatements.length; i++) {
@@ -116,7 +137,7 @@
         compareResults();
 
         currentTest++;
-
+        $.ajaxSetup({ async: true });
     }
 
 

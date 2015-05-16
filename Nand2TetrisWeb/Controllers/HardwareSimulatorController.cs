@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -26,16 +27,9 @@ namespace Nand2TetrisWeb.Controllers
 
         public JsonResult ParseFile(int id)
         {
-            var file = (from f in db.SourceFiles
-                        where f.id == id
-                        select f).FirstOrDefault();
+            
+            var ch = CreateChip(id);
 
-            if (file==null || file.userid != GetUserID())
-                return Json(new List<string>());
-
-            var sourcefiles = new ChipFileFetcher(GetUserID());
-
-            var ch = ChipParser.Parse(file.FileBody,sourcefiles.FetchFiles());
             if (ch == null)
                 return Json(new List<string>());
 
@@ -65,16 +59,7 @@ namespace Nand2TetrisWeb.Controllers
 
         public JsonResult ProcessChip(string fileid, string[] inputIDs, string[] inputVals)
         {
-            var file = (from f in db.SourceFiles
-                        where f.id.ToString() == fileid
-                        select f).FirstOrDefault();
-
-            if (file == null || file.userid != GetUserID())
-                return Json(new List<string>());
-
-            var sourcefiles = new ChipFileFetcher(GetUserID());
-
-            var ch = ChipParser.Parse(file.FileBody, sourcefiles.FetchFiles());
+            var ch = CreateChip(Int32.Parse(fileid));
 
             if(ch==null)
                 return Json(new List<string>());
@@ -83,9 +68,10 @@ namespace Nand2TetrisWeb.Controllers
 
             for (int i = 0; i < inputIDs.Length; i++)
             {
-                ch.Inputs[inputIDs[i]] = inputVals[i];
-                ch.Intermediates[inputIDs[i]] = inputVals[i];
-                inputDict[inputIDs[i]] = inputVals[i];
+                var inp = Regex.Replace(inputIDs[i], @"\[[\d.]+\]", ""); 
+                ch.Inputs[inp] = inputVals[i];
+                ch.Intermediates[inp] = inputVals[i];
+                inputDict[inp] = inputVals[i];
             }
 
             ch.ProcessChip(inputDict);
@@ -94,6 +80,20 @@ namespace Nand2TetrisWeb.Controllers
         }
 
 
+
+        private Chip CreateChip(int id)
+        {
+            var file = (from f in db.SourceFiles
+                        where f.id == id
+                        select f).FirstOrDefault();
+
+            if (file == null || file.userid != GetUserID())
+                return null;
+
+            var sourcefiles = new ChipFileFetcher(GetUserID());
+
+            return ChipParser.Parse(file.FileBody, sourcefiles.FetchFiles());
+        }
 
 
         private Guid GetUserID()

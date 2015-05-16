@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ChipProcessing
@@ -27,10 +28,10 @@ namespace ChipProcessing
             _partList = new List<Chip>();  // new Dictionary<Chip, Dictionary<string, string>>();
 
             foreach (var i in inputs)
-                _inputs[i] = null;
+                _inputs[Regex.Replace(i, @"\[[\d.]+\]", "")] = null;
 
             foreach (var o in outputs)
-                _outputs[o] = null;
+                _outputs[Regex.Replace(o, @"\[[\d.]+\]", "")] = null;
 
             _finishedProcessing = false;
 
@@ -46,7 +47,7 @@ namespace ChipProcessing
 
 
 
-        public virtual bool ProcessChip(Dictionary<string,string> inputValues)
+        public virtual bool ProcessChip(Dictionary<string, string> inputValues)
         {
 
             if (_finishedProcessing)
@@ -65,9 +66,9 @@ namespace ChipProcessing
                 foreach (var c in _partList)
                 {
                     bool pro = c.ProcessChip(Intermediates);
-                    if(pro)
+                    if (pro)
                     {
-                        foreach(var o in c.Outputs.Keys)
+                        foreach (var o in c.Outputs.Keys)
                         {
                             var w = c.Wiring[o];
                             if (!Intermediates.ContainsKey(w))
@@ -86,7 +87,7 @@ namespace ChipProcessing
             return outputsDefined();
         }
 
-      
+
 
         private bool outputsDefined()
         {
@@ -95,39 +96,63 @@ namespace ChipProcessing
 
         private void wireOutputs()
         {
-            foreach(var i in Intermediates.Keys)
+            foreach (var i in Intermediates.Keys)
             {
                 if (Outputs.ContainsKey(i))
                     Outputs[i] = Intermediates[i];
             }
-            
+
         }
 
-        protected void wireInputs(Dictionary<string,string> inputValues)
+        protected void wireInputs(Dictionary<string, string> inputValues)
         {
-            foreach(var i in inputValues.Keys)
+            foreach (var i in inputValues.Keys)
             {
-
-                if(Wiring.ContainsValue(i))
+                var keys = (from w in Wiring
+                            where Regex.Replace(w.Value, @"\[[\d.]+\]", "") == i
+                            select w.Key).ToList();
+                foreach (var key in keys)
                 {
-                    var keys = (from w in Wiring
-                                where w.Value == i
-                                select w.Key).ToList();
-                    foreach (var key in keys)
+                    if (Wiring[key].Contains('['))
+                    {
+                        var subPins = new Regex(@"(\w+)\[(\d+)[\.\.]*(\d*)\]");
+                        var matches = subPins.Match(Wiring[key]);
+                        if(matches.Success)
+                        {
+                            int start;
+                            int len;
+                            if (Wiring[key].Contains('.'))
+                            {
+                                start = Invert(Int32.Parse(matches.Groups[3].ToString()), inputValues[key].Length);
+                                var endPos = Invert(Int32.Parse(matches.Groups[2].ToString()), inputValues[key].Length);
+                                len = endPos - start;
+                            }
+                            else
+                            {
+                                start = Invert(Int32.Parse(matches.Groups[2].ToString()), inputValues[key].Length);
+                                len = 1;
+                            }
+
+                            var val = inputValues[key].Substring(start,len);
+                            Inputs[key] = val;
+                            Intermediates[key] = val;
+                        }
+                    }
+                    else
                     {
                         Inputs[key] = inputValues[i];
                         Intermediates[key] = inputValues[i];
                     }
                 }
             }
-            
+
         }
 
 
 
         public void AddChip(Chip c, string p)
         {
-            
+
             var separateWires = p.Split(',').ToList<string>();
 
             foreach (var w in separateWires)
@@ -138,6 +163,13 @@ namespace ChipProcessing
 
             _partList.Add(c);
         }
+
+
+        private int Invert(int val, int length)
+        {
+            return length - val -1;
+        }
+
 
     }
 }

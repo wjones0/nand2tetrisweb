@@ -172,6 +172,7 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AssemblerController.cs" />
     <Compile Include="Controllers\HardwareSimulatorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -245,11 +246,12 @@
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\HardwareSimulator\Index.cshtml" />
-    <Content Include="Views\Shared\_FileList.cshtml" />
-    <Content Include="Views\Shared\_FileContents.cshtml" />
-    <Content Include="Views\Shared\_ChipInputsAndOutputs.cshtml" />
-    <Content Include="Views\Shared\_TestScript.cshtml" />
-    <Content Include="Views\Shared\_TestStatus.cshtml" />
+    <Content Include="Views\Shared\HardwareSimulator\_FileList.cshtml" />
+    <Content Include="Views\Shared\HardwareSimulator\_FileContents.cshtml" />
+    <Content Include="Views\Shared\HardwareSimulator\_ChipInputsAndOutputs.cshtml" />
+    <Content Include="Views\Shared\HardwareSimulator\_TestScript.cshtml" />
+    <Content Include="Views\Shared\HardwareSimulator\_TestStatus.cshtml" />
+    <Content Include="Views\Assembler\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

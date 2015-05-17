@@ -3,12 +3,14 @@
     ViewBag.Title = "Hardware Simulator";
 }
 
+<h2>Hardware Simulator</h2>
+
 <div class="row">
-    <div class="col-md-1">@Html.Partial("_FileList")</div>
+    <div class="col-md-1">@Html.Partial("HardwareSimulator/_FileList")</div>
     <div class="col-md-1"></div>
-    <div class="col-md-3">@Html.Partial("_FileContents")</div>
-    <div class="col-md-2">@Html.Partial("_ChipInputsAndOutputs")</div>
-    <div class="col-md-3">@Html.Partial("_TestStatus")</div>
-    <div class="col-md-2">@Html.Partial("_TestScript")</div>
+    <div class="col-md-3">@Html.Partial("HardwareSimulator/_FileContents")</div>
+    <div class="col-md-2">@Html.Partial("HardwareSimulator/_ChipInputsAndOutputs")</div>
+    <div class="col-md-3">@Html.Partial("HardwareSimulator/_TestStatus")</div>
+    <div class="col-md-2">@Html.Partial("HardwareSimulator/_TestScript")</div>
 </div>
 

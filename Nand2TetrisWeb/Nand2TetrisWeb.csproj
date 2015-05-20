@@ -272,6 +272,10 @@
       <Project>{bb8c216a-ceb3-40dc-b9c5-6d75ae18ca38}</Project>
       <Name>Contracts</Name>
     </ProjectReference>
+    <ProjectReference Include="..\HackAssembler\Assembler.csproj">
+      <Project>{f1cf9913-701b-4770-ae4c-bf84bb7089b8}</Project>
+      <Name>Assembler</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

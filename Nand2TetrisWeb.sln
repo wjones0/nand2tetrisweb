@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Cont
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChipProcessing", "ChipProcessing\ChipProcessing.csproj", "{D7426A0E-9EDC-45BE-A62F-3F3B3B0AB727}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembler", "HackAssembler\Assembler.csproj", "{F1CF9913-701B-4770-AE4C-BF84BB7089B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{D7426A0E-9EDC-45BE-A62F-3F3B3B0AB727}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7426A0E-9EDC-45BE-A62F-3F3B3B0AB727}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7426A0E-9EDC-45BE-A62F-3F3B3B0AB727}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1CF9913-701B-4770-AE4C-BF84BB7089B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1CF9913-701B-4770-AE4C-BF84BB7089B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1CF9913-701B-4770-AE4C-BF84BB7089B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1CF9913-701B-4770-AE4C-BF84BB7089B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

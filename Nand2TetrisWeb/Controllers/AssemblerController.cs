@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Contracts;
+using Assembler;
 
 namespace Nand2TetrisWeb.Controllers
 {
@@ -19,7 +20,9 @@ namespace Nand2TetrisWeb.Controllers
 
         public JsonResult Assemble(string asmText)
         {
-            return Json(new AssembledFile() { asmText = asmText, hackText = asmText });
+            HackAssembler hack = new HackAssembler(asmText);
+
+            return Json(new AssembledFile() { asmText = hack.AsmText, hackText = hack.HackText });
         }
     }
 }

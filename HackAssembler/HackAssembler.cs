@@ -18,9 +18,13 @@ namespace Assembler
         private Dictionary<string, string> _dBits;
         private Dictionary<string, string> _jBits;
 
+        private Dictionary<string, string> _symbolTable;
+
         public string AsmText { get { return _asmText; } }
         public string HackText { get { return _hackText; } }
         public string Errors { get { return _errors; } }
+        public Dictionary<string, string> SymbolTalbe { get { return _symbolTable; } }
+
 
         public HackAssembler(string asmText)
         {
@@ -37,15 +41,61 @@ namespace Assembler
         {
             var workingText = RemoveAllComments(_asmText);
             var asmLines = workingText.Split('\n');
+            string[] hackLines = new string[asmLines.Length];
 
+            BuildSymbolTable(asmLines);
+
+            var hackLine = 0;
+            for (int i = 0; i < asmLines.Length; i++)
+            {
+                var labelRegEx = new Regex(@"\((.+)\)");
+                var match = labelRegEx.Match(asmLines[i].Trim());
+                if(!String.IsNullOrEmpty(asmLines[i]) && !match.Success)
+                {
+                    hackLines[hackLine] = TranslateLine(asmLines[i]);
+                    hackLine++;
+                }
+            }
+
+            _hackText = String.Join("\n", hackLines);
+        }
+
+        private void BuildSymbolTable(string[] asmLines)
+        {
+            var actualCodeLine = 0;
 
             for (int i = 0; i < asmLines.Length; i++)
             {
-                if(!String.IsNullOrEmpty(asmLines[i]))
-                    asmLines[i] = TranslateLine(asmLines[i]);
+                var labelRegEx = new Regex(@"\((.+)\)");
+                var match = labelRegEx.Match(asmLines[i].Trim());
+
+                if(match.Success)
+                {
+                    _symbolTable[match.Groups[1].Value] = (actualCodeLine).ToString();
+                }
+                else
+                {
+                    actualCodeLine++;
+                }
             }
 
-            _hackText = String.Join("\n", asmLines);
+            var memCounter = 16;
+
+            for (int i = 0; i < asmLines.Length; i++)
+            {
+                var labelRegEx = new Regex(@"@\D+");
+                var match = labelRegEx.Match(asmLines[i].Trim());
+
+                if (match.Success)
+                {
+                    if (!_symbolTable.ContainsKey(asmLines[i].Trim().Substring(1)))
+                    {
+                        _symbolTable[asmLines[i].Trim().Substring(1)] = (memCounter).ToString();
+                        memCounter++;
+                    }
+                }
+            }
+
         }
 
         private string TranslateLine(string line)
@@ -111,11 +161,39 @@ namespace Assembler
 
         private string CreateAInstruction(string line)
         {
-            var n = Int32.Parse(line.Substring(1));
+            int n;
+            if (_symbolTable.ContainsKey(line.Substring(1)))
+                n = Int32.Parse(_symbolTable[line.Substring(1)]);
+            else
+                n = Int32.Parse(line.Substring(1));
             return Convert.ToString(n, 2).PadLeft(16, '0');
         }
 
         private void InitializeDataStructures()
+        {
+            InitBitTranslations();
+            InitSymbolTable();
+
+        }
+
+        private void InitSymbolTable()
+        {
+            _symbolTable = new Dictionary<string, string>();
+
+            for (int i = 0; i < 16; i++ )
+                _symbolTable["R"+i.ToString()] = i.ToString();
+
+            _symbolTable["SCREEN"] = "16384";
+            _symbolTable["KBD"] = "24576";
+            _symbolTable["SP"] = "0";
+            _symbolTable["LCL"] = "1";
+            _symbolTable["ARG"] = "2";
+            _symbolTable["THIS"] = "3";
+            _symbolTable["THAT"] = "4";
+
+        }
+
+        private void InitBitTranslations()
         {
             _cBits = new Dictionary<string, string>();
             _cBits["0"] = "0101010";
@@ -170,7 +248,6 @@ namespace Assembler
             _jBits["JNE"] = "101";
             _jBits["JLE"] = "110";
             _jBits["JMP"] = "111";
-
         }
 
 

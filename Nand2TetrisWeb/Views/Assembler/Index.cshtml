@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewBag.Title = "Assembler";
+}
+
+<h2>Assembler</h2>
+
+<div class="row">
+    <textarea id="asmFileBody" class="input-lg"></textarea>
+    <button class="btn btn-default" type="button" onclick="assembleFile()">Assemble</button>
+    <img src="../../Content/images/ajax-loader.gif" alt="" id="assemblerSpinner" hidden />
+    <textarea id="hackFileBody" class="input-lg"></textarea>
+</div>
+
+
+
+<script type="text/javascript">
+
+
+    function assembleFile() {
+        $("#assemblerSpinner").show();
+        var asm = $("#asmFileBody").val();
+
+        $.ajax({
+            type: 'POST',
+            url: 'Assembler/Assemble',
+            data: { asmText: asm },
+            datatype: 'json',
+            success: function (data) {
+                $("#assemblerSpinner").hide();
+
+                $("#hackFileBody").val(data.hackText);
+            }
+
+        });
+    }
+
+</script>

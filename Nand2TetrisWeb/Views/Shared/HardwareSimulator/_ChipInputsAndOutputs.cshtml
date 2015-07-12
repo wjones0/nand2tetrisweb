@@ -2,19 +2,73 @@
 
 <div id="fileContents" class="input-group">
     <img src="../../Content/images/ajax-loader.gif" alt="" id="chipInsandOuts" hidden />
-    <div id="allChipInputs" hidden>
+    <div id="allChipInputs">
         <table class="table table-striped table-bordered table-responsive" id="chipIns">
+            <tr>
+                <th>Input Name</th>
+                <th>Value</th>
+            </tr>
+            <tr ng-repeat="input in parsedFile.inputs">
+                <td>
+                    {{input}}
+                </td>
+                <td>
+                    <input ng-model="inputValues[$index]" />
+                </td>
+            </tr>
         </table>
     </div>
-    <button class="btn btn-default" id="processButton" onclick="processChip()">Process</button>
+    <button class="btn btn-default" id="processButton" ng-click="processFile()">Process</button>
     <div id="allChipOutputs">
-        <table class="table table-striped table-bordered table-responsive" id="chipOuts">
+        <table class="table table-striped table-bordered table-responsive" id="chipOuts" ng-show="fileProcessed">
+            <tr>
+                <th>Output Name</th>
+                <th>Value</th>
+            </tr>
+            <tr ng-repeat="(key,val) in outputValues">
+                <td>
+                    {{key}}
+                </td>
+                <td>
+                    {{val}}
+                </td>
+            </tr>
         </table>
+        
+        <!-- small secondary table for when files aren't processed yet - just parsed.  -->
+        <table class="table table-striped table-bordered table-responsive" ng-hide="fileProcessed">
+            <tr>
+                <th>Output Name</th>
+                <th>Value</th>
+            </tr>
+            <tr ng-repeat="output in parsedFile.outputs">
+                <td>
+                    {{output}}
+                </td>
+                <td></td>
+            </tr>
+        </table>
+
     </div>
 </div>
 
 
-<script type="text/javascript">
+
+
+@*<div id="fileContents" class="input-group">
+    <img src="../../Content/images/ajax-loader.gif" alt="" id="chipInsandOuts" hidden />
+    <div id="allChipInputs" hidden>
+        <table class="table table-striped table-bordered table-responsive" id="chipIns"></table>
+    </div>
+    <button class="btn btn-default" id="processButton" onclick="processChip()">Process</button>
+    <div id="allChipOutputs">
+        <table class="table table-striped table-bordered table-responsive" id="chipOuts"></table>
+    </div>
+</div>*@
+
+
+
+@*<script type="text/javascript">
 
 
     function parseFile(fileID) {
@@ -77,5 +131,5 @@
     }
 
 
-</script>
+</script>*@
 

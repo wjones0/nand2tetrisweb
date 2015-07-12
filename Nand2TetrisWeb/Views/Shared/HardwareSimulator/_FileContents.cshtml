@@ -1,63 +1,7 @@
 ﻿
 
 <div id="fileContents" class="input-group">
-    <img src="../../Content/images/ajax-loader.gif" alt="" id="fileContentsSpinner" hidden />
-
-    <button class="btn btn-default" type="button" onclick="saveFile()">Save</button>
-    <span id="fileID" hidden></span>
-    <span id="fileName" hidden></span>
-    <textarea id="fileBody" class="input-lg"></textarea>
+    <button class="btn btn-default" type="button" ng-click="saveFile()">Save</button>
+    <textarea id="fileBody" class="input-lg" ng-model="selectedFile.FileBody"></textarea>
 </div>
 
-
-<script type="text/javascript">
-
-
-    function loadFile(fileID) {
-        $("#fileContentsSpinner").show();
-        $.ajax({
-            type: 'GET',
-            url: 'api/SourceFiles/' + fileID,
-            datatype: 'json',
-            success: function (data) {
-                $("#fileContentsSpinner").hide();
-                $("#fileBody").val(data.FileBody);
-                $("#fileID").val(data.id);
-                $("#fileName").val(data.FileName);
-                parseFile(data.id);
-                everythingLoaded = false;
-
-            },
-            error: function (data) {
-                $("#fileContentsSpinner").hide();
-                $("#fileBody").val("Error loading file");
-                everythingLoaded = false;
-            }
-
-        });
-    }
-
-
-    function saveFile() {
-        $("#fileContentsSpinner").show();
-
-        var newFileBodyText = $("#fileBody").val();
-        var fileID = $("#fileID").val();
-        var fileName = $("#fileName").val();
-
-        $.ajax({
-            type: 'PUT',
-            url: 'api/SourceFiles/' + fileID,
-            datatype: 'json',
-            data: { id: fileID, FileName: fileName, FileBody: newFileBodyText },
-            success: function (data) {
-                $("#fileContentsSpinner").hide();
-                loadFile(fileID);
-            }
-
-        });
-
-    }
-
-
-</script>

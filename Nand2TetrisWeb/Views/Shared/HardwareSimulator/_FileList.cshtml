@@ -2,76 +2,35 @@
 
 <div id="fileTypePicker" class="input-group">
     <span class="input-group-btn">
-        <button class="btn btn-default" type="button" onclick="GetExistingFiles('.hdl')">.hdl</button>
-        <button class="btn btn-default" type="button" onclick="GetExistingFiles('.tst')">.tst</button>
-        <button class="btn btn-default" type="button" onclick="GetExistingFiles('.cmp')">.cmp</button>
+        <button class="btn btn-default" type="button" ng-click="fileExtensionFilter = '.hdl'">.hdl</button>
+        <button class="btn btn-default" type="button" ng-click="fileExtensionFilter = '.tst'">.tst</button>
+        <button class="btn btn-default" type="button" ng-click="fileExtensionFilter = '.cmp'">.cmp</button>
     </span>
 </div>
-<div id="newFileGroup" class="input-group">
-    <input id="newFileName" class="form-control" />
+
+
+<div>
+    <ul>
+        <li ng-repeat="sf in sourceFileData | filter:{FileName :fileExtensionFilter}" ng-click="selectFile(sf)">{{sf.FileName}}</li>
+    </ul>
+</div>
+
+
+<form class="input-group" ng-submit="newFileSubmit()" name="newFileForm">
+    <input class="form-control"
+           type="text"
+           placeholder="New File Name"
+           ng-model="newFileName"
+           required>
     <span class="input-group-btn">
-        <button class="btn btn-default" type="button" onclick="newfile()">+</button>
+        <button class="btn btn-default"
+                type="submit"
+                ng-disabled="newFileForm.$invalid">
+            +
+        </button>
     </span>
-</div>
-
-<div id="existingFiles">
-    <ul id="fileListing"></ul>
-</div>
-
-<script type="text/javascript">
-    function newfile() {
-        var fileName = $("#newFileName").val();
-        $.ajax({
-            type: 'POST',
-            url: '/api/SourceFiles',
-            datatype: 'json',
-            data: { FileName: fileName },
-
-            statusCode: {
-                201: function (data) {
-                    GetExistingFiles(fileName.substring(fileName.length-4,fileName.length));
-                    $("#newFileName").val("");
-                }
-            },
-            error: function (data) {
-                alert("error");
-            }
-        })
-    }
+</form>
 
 
-    function GetExistingFiles(filetype)
-    {
-        $("#fileListing").empty();
-        $("#fileListing").append('<img src="../../Content/images/ajax-loader.gif" alt="" />');
-        $.ajax({
-            type: 'GET',
-            url: 'api/SourceFiles',
-            datatype: 'json',
-            success: function (data) {                
-                $("#fileListing").empty();
-                $.each(data, function (i, item) {
-                    if (item.FileName.indexOf(filetype) > -1) {
-                        if(filetype == ".hdl")
-                            $("#fileListing").append('<li onclick="loadFile(' + item.id + ')">' + item.FileName + "</li>");
-                        else
-                            if(filetype == ".tst")
-                                $("#fileListing").append('<li onclick="loadTestFile(' + item.id + ')">' + item.FileName + "</li>");
-                            else
-                                if(filetype == ".cmp")
-                                    $("#fileListing").append('<li onclick="loadCompareFile(' + item.id + ')">' + item.FileName + "</li>");
-                    }
-                });
-            }
-
-        });
-    }
-
-
-    $(document).ready(function () {
-        //GetExistingFiles();
-    });
-
-</script>
 
 

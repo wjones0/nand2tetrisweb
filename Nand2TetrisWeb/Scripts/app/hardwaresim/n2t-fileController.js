@@ -2,35 +2,35 @@
 
 
 
-angular.module('nand2tetris').controller('n2t-fileCtrl', ['$scope', '$http', function ($scope, $http) {
+angular.module('nand2tetris').controller('n2t-fileCtrl', ['$scope', '$http', 'sourceFileFactory', 'fileProcessingFactory', function ($scope, $http, sourceFileFactory, fileProcessingFactory) {
 
     $scope.hi = 'yo';
     $scope.fileExtensionFilter = ".hdl";
 
     $scope.ListFiles = function () {
-        $http.get('/api/SourceFiles', {})
-        .success(function (data, status, headers, config) {
-            $scope.sourceFileData = data;
-        })
-        .error(function (data, status, headers, config) {
+        sourceFileFactory.GetSourceFiles()
+            .success(function (data, status, headers, config) {
+                $scope.sourceFileData = data;
+            })
+            .error(function (data, status, headers, config) {
 
-        });
+            });
     };
 
 
     $scope.newFileSubmit = function () {
-        $http.post('/api/SourceFiles', { FileName: $scope.newFileName })
+        sourceFileFactory.NewFile($scope.newFileName)
             .success(function (data, status, headers, config) {
+                $scope.newFileName = "";
                 $scope.ListFiles();
             })
             .error(function (data, status, headers, config) {
-
             });
 
     };
 
     $scope.saveFile = function () {
-        $http.put('/api/SourceFiles/' + $scope.selectedFile.id, { id: $scope.selectedFile.id, FileName: $scope.selectedFile.FileName, FileBody: $scope.selectedFile.FileBody })
+        sourceFileFactory.SaveFile($scope.selectedFile.id, $scope.selectedFile.FileName, $scope.selectedFile.FileBody)
             .success(function (data, status, headers, config) {
                 $scope.ListFiles();
 
@@ -49,7 +49,7 @@ angular.module('nand2tetris').controller('n2t-fileCtrl', ['$scope', '$http', fun
 
 
     $scope.parseFile = function () {
-        $http.post('/HardwareSimulator/ParseFile', { id: $scope.selectedFile.id })
+        fileProcessingFactory.ParseFile($scope.selectedFile.id)
             .success(function (data, status, headers, config) {
                 $scope.parsedFile = data;
             })
@@ -59,7 +59,7 @@ angular.module('nand2tetris').controller('n2t-fileCtrl', ['$scope', '$http', fun
     };
 
     $scope.processFile = function () {
-        $http.post('/HardwareSimulator/ProcessChip', { fileid: $scope.selectedFile.id, inputIDs: $scope.parsedFile.inputs, inputVals: $scope.inputValues })
+        fileProcessingFactory.ProcessChip($scope.selectedFile.id, $scope.parsedFile.inputs, $scope.inputValues)
             .success(function (data, status, headers, config) {
                 $scope.outputValues = JSON.parse(data);
                 $scope.fileProcessed = true;

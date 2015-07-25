@@ -20,6 +20,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -199,7 +200,9 @@
     <Content Include="Scripts\angular-mocks.js" />
     <Content Include="Scripts\angular.js" />
     <Content Include="Scripts\angular.min.js" />
-    <Content Include="Scripts\app\n2t-fileController.js" />
+    <Content Include="Scripts\app\hardwaresim\fileProcessingFactory.js" />
+    <Content Include="Scripts\app\hardwaresim\n2t-fileController.js" />
+    <Content Include="Scripts\app\hardwaresim\sourceFileFactory.js" />
     <Content Include="Scripts\app\nand2tetrisang.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />

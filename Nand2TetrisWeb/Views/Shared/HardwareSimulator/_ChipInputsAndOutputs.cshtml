@@ -19,6 +19,7 @@
         </table>
     </div>
     <button class="btn btn-default" id="processButton" ng-click="processFile()">Process</button>
+    <img src="~/Content/images/ajax-loader.gif" ng-show="fileProcessing"/>
     <div id="allChipOutputs">
         <table class="table table-striped table-bordered table-responsive" id="chipOuts" ng-show="fileProcessed">
             <tr>

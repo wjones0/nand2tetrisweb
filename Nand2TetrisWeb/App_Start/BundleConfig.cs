@@ -26,6 +26,14 @@ namespace Nand2TetrisWeb
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/ng-n2t-app").Include(
+                    "~/Scripts/angular.min.js",
+                    "~/Scripts/app/nand2tetrisang.js",
+                    "~/Scripts/app/hardwaresim/sourceFileFactory.js",
+                    "~/Scripts/app/hardwaresim/fileProcessingFactory.js",
+                    "~/Scripts/app/hardwaresim/n2t-fileController.js"
+                ));
         }
     }
 }

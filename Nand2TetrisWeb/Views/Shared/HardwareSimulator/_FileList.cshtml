@@ -10,6 +10,7 @@
 
 
 <div>
+    <img src="~/Content/images/ajax-loader.gif" ng-show="filesLoading" />
     <ul>
         <li ng-repeat="sf in sourceFileData | filter:{FileName :fileExtensionFilter}" ng-click="selectFile(sf)">{{sf.FileName}}</li>
     </ul>

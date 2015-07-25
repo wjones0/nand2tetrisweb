@@ -1,7 +1,14 @@
 ﻿
 
 <div id="fileContents" class="input-group">
-    <button class="btn btn-default" type="button" ng-click="saveFile()">Save</button>
-    <textarea id="fileBody" class="input-lg" ng-model="selectedFile.FileBody"></textarea>
+    <div class="row">
+        <h4>{{selectedFile.FileName}}</h4>
+    </div>
+    <div class="row">
+        <textarea id="fileBody" class="input-lg" ng-model="selectedFile.FileBody"></textarea>
+    </div>
+    <div class="row">
+        <button class="btn btn-default" type="button" ng-click="saveFile()">Save</button>
+        <img src="~/Content/images/ajax-loader.gif" ng-show="fileSaving" />
+    </div>
 </div>
-

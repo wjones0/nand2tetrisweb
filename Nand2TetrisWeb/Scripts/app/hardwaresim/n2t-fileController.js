@@ -8,9 +8,11 @@ angular.module('nand2tetris').controller('n2t-fileCtrl', ['$scope', 'sourceFileF
     $scope.fileExtensionFilter = ".hdl";
 
     $scope.ListFiles = function () {
+        $scope.filesLoading = true;
         sourceFileFactory.GetSourceFiles()
             .success(function (data, status, headers, config) {
                 $scope.sourceFileData = data;
+                $scope.filesLoading = false;
             })
             .error(function (data, status, headers, config) {
 
@@ -19,6 +21,7 @@ angular.module('nand2tetris').controller('n2t-fileCtrl', ['$scope', 'sourceFileF
 
 
     $scope.newFileSubmit = function () {
+        $scope.filesLoading = true;
         sourceFileFactory.NewFile($scope.newFileName)
             .success(function (data, status, headers, config) {
                 $scope.newFileName = "";
@@ -30,6 +33,7 @@ angular.module('nand2tetris').controller('n2t-fileCtrl', ['$scope', 'sourceFileF
     };
 
     $scope.saveFile = function () {
+        $scope.fileSaving = true;
         sourceFileFactory.SaveFile($scope.selectedFile.id, $scope.selectedFile.FileName, $scope.selectedFile.FileBody)
             .success(function (data, status, headers, config) {
                 $scope.ListFiles();
@@ -41,6 +45,7 @@ angular.module('nand2tetris').controller('n2t-fileCtrl', ['$scope', 'sourceFileF
                         $scope.selectFile(value);
                     }
                 })
+                $scope.fileSaving = false;
             })
             .error(function (data, status, headers, config) {
 
@@ -59,10 +64,12 @@ angular.module('nand2tetris').controller('n2t-fileCtrl', ['$scope', 'sourceFileF
     };
 
     $scope.processFile = function () {
+        $scope.fileProcessing = true;
         fileProcessingFactory.ProcessChip($scope.selectedFile.id, $scope.parsedFile.inputs, $scope.inputValues)
             .success(function (data, status, headers, config) {
                 $scope.outputValues = JSON.parse(data);
                 $scope.fileProcessed = true;
+                $scope.fileProcessing = false;
             })
             .error(function (data, status, headers, config) {
 

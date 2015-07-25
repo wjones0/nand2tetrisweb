@@ -2,7 +2,7 @@
 
 
 
-angular.module('nand2tetris').controller('n2t-fileCtrl', ['$scope', '$http', 'sourceFileFactory', 'fileProcessingFactory', function ($scope, $http, sourceFileFactory, fileProcessingFactory) {
+angular.module('nand2tetris').controller('n2t-fileCtrl', ['$scope', 'sourceFileFactory', 'fileProcessingFactory', function ($scope, sourceFileFactory, fileProcessingFactory) {
 
     $scope.hi = 'yo';
     $scope.fileExtensionFilter = ".hdl";

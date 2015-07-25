@@ -718,12 +718,15 @@ output;
                 userid = new Guid(testinguser.Id)
             });
 
-        
+
+            context.SaveChanges();
+            foreach (var f in context.SourceFiles)
+            {
+                f.minFileBody = ChipProcessing.ChipParser.RemoveAllComments(f.FileBody);
+                context.Entry(f).State = EntityState.Modified;
+            }
+            context.SaveChanges();
         }
-
-
-
-
 
 
 

@@ -78,11 +78,31 @@ angular.module('nand2tetris').controller('n2t-fileCtrl', ['$scope', 'sourceFileF
 
 
     $scope.selectFile = function (file) {
-        $scope.selectedFile = file;
-        $scope.inputValues = [];
-        $scope.fileProcessed = false;
-        $scope.parseFile();
+        if ($scope.fileExtensionFilter == ".hdl") {
+            $scope.selectedFile = file;
+            $scope.inputValues = [];
+            $scope.fileProcessed = false;
+            $scope.parseFile();
+        }
+        else
+            if ($scope.fileExtensionFilter == ".tst") {
+                $scope.testFile = file;
+                console.log(JSON.stringify(file));
+                $scope.testCases = file.minFileBody.split(';');
+                // remove first element (file loading)
+                $scope.testCases.shift();
+                // remove last element (blank lines)
+                $scope.testCases.pop();
+            }
+            else
+                if ($scope.fileExtensionFilter == ".cmp") {
+                    $scope.compareFile = file;
+                }
     };
+
+    $scope.selectTestCase = function (testCase) {
+        $scope.selectedTestCase = testCase;
+    }
 
     $scope.ListFiles();
 

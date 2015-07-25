@@ -4,12 +4,20 @@
     <img src="../../Content/images/ajax-loader.gif" alt="" id="testStatusSpinner" hidden />
 
     <table id="testStatusTable" class="table table-responsive table-striped text-center">
+        <tr>
+            <th>Test</th>
+            <th>Status</th>
+        </tr>
+        <tr ng-repeat="testCase in testCases">
+            <td ng-click="selectTestCase(testCase)">Test {{$index}}</td>
+            <td><span class='glyphicon glyphicon-cog glyph-blue'></span></td>
+        </tr>
     </table>
-    <textarea id="singleTestCase" class="input-lg"></textarea>
+    <textarea id="singleTestCase" class="input-lg" ng-model="selectedTestCase"></textarea>
 </div>
 
 
-<script type="text/javascript">
+@*<script type="text/javascript">
 
     var testCaseTexts;
 
@@ -44,7 +52,7 @@
     }
 
 
-</script>
+</script>*@
 
 
 

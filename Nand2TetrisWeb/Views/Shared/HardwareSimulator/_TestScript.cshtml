@@ -1,20 +1,19 @@
 ﻿
 
 <div id="testScriptArea" class="input-group">
-    <img src="../../Content/images/ajax-loader.gif" alt="" id="testFileSpinner" hidden />
 
-    <textarea id="testFileBody" class="input-lg"></textarea>
+    <textarea id="testFileBody" class="input-lg" ng-model="testFile.FileBody"></textarea>
+
     <button class="btn btn-default" type="button" onclick="runNextTest()">Run Next Test</button>
     <button class="btn btn-default" type="button" onclick="runTestScript()">Run All Tests</button>
     <button class="btn btn-default" type="button" onclick="reloadTestFile()">Reset</button>
 
-    <img src="../../Content/images/ajax-loader.gif" alt="" id="compareFileSpinner" hidden />
 
-    <textarea id="compareFileBody" class="input-lg"></textarea>
+    <textarea id="compareFileBody" class="input-lg" ng-model="compareFile.FileBody"></textarea>
 </div>
 
 
-<script type="text/javascript">
+@*<script type="text/javascript">
 
     //  File stuff
     var currLoadedTestFileID;
@@ -190,5 +189,5 @@
             failTest($("#testStatusTable").find('span')[currentTest - 1]);
     }
 
-</script>
+</script>*@
 

@@ -62,6 +62,7 @@ namespace Nand2TetrisWeb.Controllers
 
             
             sf.FileBody = sourceFile.FileBody;
+            sf.minFileBody = ChipProcessing.ChipParser.RemoveAllComments(sourceFile.FileBody);
             sf.ModifyDate = DateTime.Now;
 
             db.Entry(sf).State = EntityState.Modified;

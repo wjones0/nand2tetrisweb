@@ -9,8 +9,10 @@
             <th>Status</th>
         </tr>
         <tr ng-repeat="testCase in testCases">
-            <td ng-click="selectTestCase(testCase)">Test {{$index}}</td>
-            <td><span class='glyphicon glyphicon-cog glyph-blue'></span></td>
+            <td ng-click="selectTestCase(testCase.test)">Test {{$index}}</td>
+            <td><span class='glyphicon glyphicon-cog glyph-blue' ng-show="testCase.result == ''"></span></td>
+            <td><span class='glyphicon glyphicon-ok glyph-green' ng-show="testCase.result == 'Pass'"></span></td>
+            <td><span class='glyphicon glyphicon-remove glyph-red' ng-show="testCase.result == 'Fail'"></span></td>
         </tr>
     </table>
     <textarea id="singleTestCase" class="input-lg" ng-model="selectedTestCase"></textarea>

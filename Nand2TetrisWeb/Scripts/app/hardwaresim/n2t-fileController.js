@@ -6,6 +6,7 @@ angular.module('nand2tetris').controller('n2t-fileCtrl', ['$scope', 'sourceFileF
 
     $scope.hi = 'yo';
     $scope.fileExtensionFilter = ".hdl";
+    $scope.testCases = [];
 
     $scope.ListFiles = function () {
         $scope.filesLoading = true;
@@ -87,12 +88,21 @@ angular.module('nand2tetris').controller('n2t-fileCtrl', ['$scope', 'sourceFileF
         else
             if ($scope.fileExtensionFilter == ".tst") {
                 $scope.testFile = file;
-                console.log(JSON.stringify(file));
-                $scope.testCases = file.minFileBody.split(';');
-                // remove first element (file loading)
-                $scope.testCases.shift();
+                
+                var temptestCases = file.minFileBody.split(';');
+                // remove first element (file loading) and save file names for later
+                $scope.testSetupFiles = $scope.extractFileNames(temptestCases.shift());
+
                 // remove last element (blank lines)
-                $scope.testCases.pop();
+                temptestCases.pop();
+
+                angular.forEach(temptestCases, function (value, key) {
+                    var testCase = {};
+                    testCase.test = value.replace(/^\s+|\s+$/g, "");
+                    testCase.result = '';
+
+                    $scope.testCases.push(testCase);
+                });
             }
             else
                 if ($scope.fileExtensionFilter == ".cmp") {
@@ -102,7 +112,14 @@ angular.module('nand2tetris').controller('n2t-fileCtrl', ['$scope', 'sourceFileF
 
     $scope.selectTestCase = function (testCase) {
         $scope.selectedTestCase = testCase;
-    }
+    };
+
+    $scope.extractFileNames = function (fileNameText) {
+        var filesToLoad = fileNameText.split(',');
+        var hdlFile = filesToLoad[0].split(' ')[1];
+        var cmpFile = filesToLoad[2].split(' ')[1];
+        return { hdl: hdlFile, cmp: cmpFile };
+    };
 
     $scope.ListFiles();
 
